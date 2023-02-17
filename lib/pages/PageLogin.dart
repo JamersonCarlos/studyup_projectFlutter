@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_1/pages/PageRegister.dart';
 import 'package:flutter_application_1/pages/home.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -161,9 +162,20 @@ class _AutheticationPageState extends State<AutheticationPage> {
                   "Don't have an account ? ",
                   style: GoogleFonts.lato(fontSize: 17),
                 ),
-                Text(
-                  "Create",
-                  style: GoogleFonts.lato(fontSize: 17),
+                GestureDetector(
+                  child: Text(
+                    "Create",
+                    style: GoogleFonts.lato(
+                        fontSize: 17,
+                        color: Color(0xFF3813C2),
+                        decoration: TextDecoration.underline),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RegisterScreen()));
+                  },
                 )
               ],
             ),

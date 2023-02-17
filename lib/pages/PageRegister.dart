@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/PageLogin.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -14,6 +17,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController pass = TextEditingController();
+
+  bool validator_email = false;
+  bool validator_pass = false;
+  bool exist_email = false;
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
           ),
           Padding(
-            padding:
-                const EdgeInsets.only(top: 25, left: 25, right: 25, bottom: 10),
+            padding: const EdgeInsets.only(top: 20, left: 25, right: 25),
             child: Material(
               borderRadius: BorderRadius.circular(50),
               elevation: 5.0,
@@ -48,7 +54,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: TextFormField(
                 obscureText: false,
                 autofocus: false,
-                controller: email,
+                controller: username,
                 keyboardType: TextInputType.emailAddress,
                 cursorColor: Colors.grey,
                 decoration: InputDecoration(
@@ -69,8 +75,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
           ),
           Padding(
-            padding:
-                const EdgeInsets.only(top: 25, left: 25, right: 25, bottom: 10),
+            padding: const EdgeInsets.only(top: 20, left: 25, right: 25),
             child: Material(
               borderRadius: BorderRadius.circular(50),
               elevation: 5.0,
@@ -78,7 +83,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: TextFormField(
                 obscureText: false,
                 autofocus: false,
-                controller: pass,
+                controller: email,
                 keyboardType: TextInputType.emailAddress,
                 cursorColor: Colors.grey,
                 decoration: InputDecoration(
@@ -92,15 +97,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       style: GoogleFonts.lato(
                         fontWeight: FontWeight.normal,
                         fontSize: 15,
-                        color: Color(0xFFC8C8C8),
+                        color: const Color(0xFFC8C8C8),
                       ),
                     )),
               ),
             ),
           ),
           Padding(
-            padding:
-                const EdgeInsets.only(top: 25, left: 25, right: 25, bottom: 10),
+            padding: const EdgeInsets.only(top: 20, left: 25, right: 25),
             child: Material(
               borderRadius: BorderRadius.circular(50),
               elevation: 5.0,
@@ -108,7 +112,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: TextFormField(
                 obscureText: false,
                 autofocus: false,
-                controller: email,
+                controller: pass,
                 keyboardType: TextInputType.emailAddress,
                 cursorColor: Colors.grey,
                 decoration: InputDecoration(
@@ -142,7 +146,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      signUp(context);
+                    },
                     iconSize: 45,
                     icon: SvgPicture.asset('assets/img/button.svg'))
               ],
@@ -150,7 +157,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           Row(
             children: [
-              SvgPicture.asset('assets/img/bottom_background1.svg'),
+              Stack(
+                alignment: Alignment.bottomLeft,
+                children: [
+                  SvgPicture.asset('assets/img/bottom_background.svg'),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Icon(
+                        Icons.arrow_circle_left,
+                        color: Color(0xFFBD33D3),
+                        size: 50,
+                      )),
+                ],
+              ),
             ],
           ),
         ],
@@ -158,9 +179,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  void signUp(BuildContext context) {
-    try {} on FirebaseAuthException catch (e) {
+  void signUp(BuildContext context) async {
+    try {
+      UserCredential user = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: email.text.trim(), password: pass.text);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => AutheticationPage()),
+          (Route<dynamic> route) => false);
+    } on FirebaseAuthException catch (e) {
       print(e.toString());
+      if (e.code == 'invalid-email') {
+        scaffoldMessenger(context, 'Invalid Email');
+      } else if (e.code == 'weak-password') {
+        scaffoldMessenger(context, 'Password min length 6');
+      } else if (e.code == 'email-already-in-use') {
+        scaffoldMessenger(context, 'Email in use');
+      }
     }
+  }
+
+  void scaffoldMessenger(BuildContext context, String value) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: Color.fromARGB(188, 57, 19, 194),
+      content: Text(
+        value,
+        style: GoogleFonts.lato(
+          color: Colors.white,
+        ),
+      ),
+    ));
   }
 }
