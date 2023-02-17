@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_1/pages/calendar/calendar_page.dart';
 import 'package:flutter_application_1/pages/home.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -131,6 +132,10 @@ class _AutheticationPageState extends State<AutheticationPage> {
                 IconButton(
                     onPressed: () {
                       doLogin(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CalendarPage()));
                     },
                     iconSize: 45,
                     icon: SvgPicture.asset('assets/img/button.svg'))
