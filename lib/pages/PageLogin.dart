@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_1/cubits/calendar/calendar_cubit.dart';
 import 'package:flutter_application_1/pages/calendar/calendar_page.dart';
 import 'package:flutter_application_1/pages/home.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -22,6 +24,7 @@ class _AutheticationPageState extends State<AutheticationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final _cubit = context.read<CalendarCubit>();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xFFF5F5F5),
@@ -133,9 +136,16 @@ class _AutheticationPageState extends State<AutheticationPage> {
                     onPressed: () {
                       doLogin(context);
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const CalendarPage()));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return BlocProvider<CalendarCubit>.value(
+                              value: _cubit,
+                              child:const  CalendarPage(),
+                            );
+                          },
+                        ),
+                      );
                     },
                     iconSize: 45,
                     icon: SvgPicture.asset('assets/img/button.svg'))
