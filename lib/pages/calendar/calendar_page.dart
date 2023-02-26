@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/cubits/calendar/calendar_cubit.dart';
+import 'package:flutter_application_1/pages/calendar/width/event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -11,9 +12,6 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-
-  
-
   @override
   Widget build(BuildContext context) {
     late CalendarCubit _cubit = context.read<CalendarCubit>();
@@ -49,15 +47,14 @@ class _CalendarPageState extends State<CalendarPage> {
               );
             },
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 22),
           Expanded(
-              child: ListView.builder(
+              child: ListView.separated(
+            padding: const EdgeInsets.only(bottom: 150),
             itemCount: 5,
+            separatorBuilder: (context, index) => const Padding(padding: EdgeInsets.symmetric(vertical: 6)),
             itemBuilder: (context, index) {
-              return ListTile(
-                title: Text("Event$index"),
-                leading: const Icon(Icons.calendar_month),
-              );
+              return EventWidget(index: index);
             },
           ))
         ],
