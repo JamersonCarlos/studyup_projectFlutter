@@ -75,8 +75,10 @@ flutter:
 
   assets: 
       - assets/img/top_background.svg
+      - assets/img/top_background1.svg
       - assets/img/button.svg
       - assets/img/bottom_background.svg
+      - assets/img/bottom_background1.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

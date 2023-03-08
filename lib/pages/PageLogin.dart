@@ -1,12 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+<<<<<<< HEAD
 import 'package:flutter_application_1/cubits/calendar/calendar_cubit.dart';
 import 'package:flutter_application_1/pages/calendar/calendar_page.dart';
+=======
+import 'package:flutter_application_1/pages/PageRegister.dart';
+>>>>>>> e32ea5987db67e4ec905cd3af8cc25023b6cb1a5
 import 'package:flutter_application_1/pages/home.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class AutheticationPage extends StatefulWidget {
   const AutheticationPage({super.key});
@@ -21,6 +26,16 @@ class _AutheticationPageState extends State<AutheticationPage> {
   final senha = TextEditingController();
 
   bool visibility_pass = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Firebase.initializeApp().whenComplete(() {
+      print("completed");
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,10 +97,15 @@ class _AutheticationPageState extends State<AutheticationPage> {
                 cursorColor: Colors.grey,
                 decoration: InputDecoration(
                     suffixIcon: GestureDetector(
-                      child: const Icon(
-                        Icons.visibility,
-                        color: Colors.grey,
-                      ),
+                      child: visibility_pass
+                          ? const Icon(
+                              Icons.visibility,
+                              color: Colors.grey,
+                            )
+                          : const Icon(
+                              Icons.visibility_off,
+                              color: Colors.grey,
+                            ),
                       onTap: () {
                         setState(() {
                           visibility_pass = !visibility_pass;
@@ -158,11 +178,22 @@ class _AutheticationPageState extends State<AutheticationPage> {
                 SvgPicture.asset('assets/img/bottom_background.svg'),
                 Text(
                   "Don't have an account ? ",
-                  style: GoogleFonts.lato(fontSize: 15),
+                  style: GoogleFonts.lato(fontSize: 17),
                 ),
-                Text(
-                  "Create",
-                  style: GoogleFonts.lato(fontSize: 15),
+                GestureDetector(
+                  child: Text(
+                    "Create",
+                    style: GoogleFonts.lato(
+                        fontSize: 17,
+                        color: Color(0xFF3813C2),
+                        decoration: TextDecoration.underline),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RegisterScreen()));
+                  },
                 )
               ],
             ),
@@ -178,9 +209,23 @@ class _AutheticationPageState extends State<AutheticationPage> {
           .signInWithEmailAndPassword(email: email.text, password: senha.text);
       if (user != null) {
         senha.clear();
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => HomeApp()),
+            (Route<dynamic> route) => false);
       }
-    } catch (e) {
-      print(e.toString());
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Color(0xFF3813C2),
+            content: Text(
+              textAlign: TextAlign.center,
+              'Usuário não encontrado! Cadastra-se ',
+              style: GoogleFonts.lato(fontSize: 18),
+            ),
+          ),
+        );
+      }
     }
   }
 }
