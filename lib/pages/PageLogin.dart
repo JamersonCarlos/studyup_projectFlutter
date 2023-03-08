@@ -1,17 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-<<<<<<< HEAD
-import 'package:flutter_application_1/cubits/calendar/calendar_cubit.dart';
-import 'package:flutter_application_1/pages/calendar/calendar_page.dart';
-=======
 import 'package:flutter_application_1/pages/PageRegister.dart';
->>>>>>> e32ea5987db67e4ec905cd3af8cc25023b6cb1a5
 import 'package:flutter_application_1/pages/home.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
+
+import '../cubits/calendar/calendar_cubit.dart';
+import 'calendar/calendar_page.dart';
 
 class AutheticationPage extends StatefulWidget {
   const AutheticationPage({super.key});
