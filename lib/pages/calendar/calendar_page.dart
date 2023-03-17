@@ -52,7 +52,8 @@ class _CalendarPageState extends State<CalendarPage> {
               child: ListView.separated(
             padding: const EdgeInsets.only(bottom: 150),
             itemCount: 5,
-            separatorBuilder: (context, index) => const Padding(padding: EdgeInsets.symmetric(vertical: 6)),
+            separatorBuilder: (context, index) =>
+                const Padding(padding: EdgeInsets.symmetric(vertical: 6)),
             itemBuilder: (context, index) {
               return EventWidget(index: index);
             },

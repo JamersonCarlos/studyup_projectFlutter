@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +23,7 @@ class _AutheticationPageState extends State<AutheticationPage> {
   final formKey = GlobalKey<FormState>();
   final email = TextEditingController();
   final senha = TextEditingController();
+  FirebaseFirestore db = FirebaseFirestore.instance;
 
   bool visibility_pass = false;
 
@@ -37,7 +39,7 @@ class _AutheticationPageState extends State<AutheticationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final _cubit = context.read<CalendarCubit>();
+    final CalendarCubit _cubit = context.read<CalendarCubit>();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xFFF5F5F5),
@@ -152,18 +154,7 @@ class _AutheticationPageState extends State<AutheticationPage> {
                 ),
                 IconButton(
                     onPressed: () {
-                      doLogin(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return BlocProvider<CalendarCubit>.value(
-                              value: _cubit,
-                              child:const  CalendarPage(),
-                            );
-                          },
-                        ),
-                      );
+                      doLogin(context, _cubit);
                     },
                     iconSize: 45,
                     icon: SvgPicture.asset('assets/img/button.svg'))
@@ -201,15 +192,19 @@ class _AutheticationPageState extends State<AutheticationPage> {
     );
   }
 
-  void doLogin(BuildContext context) async {
+  void doLogin(BuildContext context, CalendarCubit _cubit) async {
     try {
       UserCredential user = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email.text, password: senha.text);
       if (user != null) {
         senha.clear();
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => HomeApp()),
-            (Route<dynamic> route) => false);
+            MaterialPageRoute(builder: (context) {
+          return BlocProvider<CalendarCubit>.value(
+            value: _cubit,
+            child: const CalendarPage(),
+          );
+        }), (Route<dynamic> route) => false);
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

@@ -7,7 +7,9 @@ class EventWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12,),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 12,
+      ),
       child: Container(
         height: 90,
         width: MediaQuery.of(context).size.width * 0.65,
@@ -26,16 +28,16 @@ class EventWidget extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    "Event$index",
+                    "Meta$index",
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                   const SizedBox(height: 2),
                   Row(
                     children: const [
-                       Icon(Icons.menu),
-                       SizedBox(width: 6),
-                       Icon(Icons.draw)
+                      Icon(Icons.menu),
+                      SizedBox(width: 6),
+                      Icon(Icons.draw)
                     ],
                   ),
                 ],

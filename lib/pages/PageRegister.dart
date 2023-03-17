@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/PageLogin.dart';
@@ -17,6 +18,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController pass = TextEditingController();
+  FirebaseFirestore db = FirebaseFirestore.instance;
 
   bool validator_email = false;
   bool validator_pass = false;
@@ -147,7 +149,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 IconButton(
                     onPressed: () {
-                      FocusScope.of(context).requestFocus(FocusNode());
+                      // FocusScope.of(context).requestFocus(FocusNode());
                       signUp(context);
                     },
                     iconSize: 45,
@@ -155,24 +157,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ],
             ),
           ),
-          Row(
-            children: [
-              Stack(
-                alignment: Alignment.bottomLeft,
-                children: [
-                  SvgPicture.asset('assets/img/bottom_background.svg'),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Icon(
-                        Icons.arrow_circle_left,
-                        color: Color(0xFFBD33D3),
-                        size: 50,
-                      )),
-                ],
-              ),
-            ],
+          Expanded(
+            child: Row(
+              children: [
+                Stack(
+                  alignment: Alignment.bottomLeft,
+                  children: [
+                    SvgPicture.asset('assets/img/bottom_background.svg'),
+                    TextButton(
+                        onPressed: () {
+                          signUp(context);
+                        },
+                        child: const Icon(
+                          Icons.arrow_circle_left,
+                          color: Color(0xFFBD33D3),
+                          size: 50,
+                        )),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -184,6 +188,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
       UserCredential user = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
               email: email.text.trim(), password: pass.text);
+      final new_user = <String, String>{
+        "username": username.text,
+        "email": email.text,
+      };
+
+      //Add new user in collection users
+      db.collection('users').doc(user.user!.uid).set(new_user);
+
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => AutheticationPage()),
           (Route<dynamic> route) => false);
