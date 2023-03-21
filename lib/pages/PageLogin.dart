@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/pages/PageRegister.dart';
 import 'package:flutter_application_1/pages/home.dart';
+import 'package:flutter_application_1/services/authetication.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -24,6 +27,8 @@ class _AutheticationPageState extends State<AutheticationPage> {
   final email = TextEditingController();
   final senha = TextEditingController();
   FirebaseFirestore db = FirebaseFirestore.instance;
+
+  final ServiceAuthentication service = ServiceAuthentication();
 
   bool visibility_pass = false;
 
@@ -154,7 +159,7 @@ class _AutheticationPageState extends State<AutheticationPage> {
                 ),
                 IconButton(
                     onPressed: () {
-                      doLogin(context, _cubit);
+                      service.doLogin(context, _cubit, email.text, senha.text);
                     },
                     iconSize: 45,
                     icon: SvgPicture.asset('assets/img/button.svg'))
@@ -190,35 +195,5 @@ class _AutheticationPageState extends State<AutheticationPage> {
         ],
       ),
     );
-  }
-
-  void doLogin(BuildContext context, CalendarCubit _cubit) async {
-    try {
-      UserCredential user = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email.text, password: senha.text);
-      if (user != null) {
-        senha.clear();
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) {
-          return BlocProvider<CalendarCubit>.value(
-            value: _cubit,
-            child: const CalendarPage(),
-          );
-        }), (Route<dynamic> route) => false);
-      }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Color(0xFF3813C2),
-            content: Text(
-              textAlign: TextAlign.center,
-              'Usuário não encontrado! Cadastra-se ',
-              style: GoogleFonts.lato(fontSize: 18),
-            ),
-          ),
-        );
-      }
-    }
   }
 }

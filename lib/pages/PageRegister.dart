@@ -1,9 +1,11 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/PageLogin.dart';
+import 'package:flutter_application_1/services/authetication.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -19,6 +21,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController email = TextEditingController();
   TextEditingController pass = TextEditingController();
   FirebaseFirestore db = FirebaseFirestore.instance;
+  ServiceAuthentication service = ServiceAuthentication();
 
   bool validator_email = false;
   bool validator_pass = false;
@@ -150,7 +153,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 IconButton(
                     onPressed: () {
                       // FocusScope.of(context).requestFocus(FocusNode());
-                      signUp(context);
+                      service.signUp(
+                          context, email.text, pass.text, username.text);
                     },
                     iconSize: 45,
                     icon: SvgPicture.asset('assets/img/button.svg'))
@@ -165,9 +169,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: [
                     SvgPicture.asset('assets/img/bottom_background.svg'),
                     TextButton(
-                        onPressed: () {
-                          signUp(context);
-                        },
+                        onPressed: () {},
                         child: const Icon(
                           Icons.arrow_circle_left,
                           color: Color(0xFFBD33D3),
@@ -181,45 +183,5 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ],
       ),
     );
-  }
-
-  void signUp(BuildContext context) async {
-    try {
-      UserCredential user = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: email.text.trim(), password: pass.text);
-      final new_user = <String, String>{
-        "username": username.text,
-        "email": email.text,
-      };
-
-      //Add new user in collection users
-      db.collection('users').doc(user.user!.uid).set(new_user);
-
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => AutheticationPage()),
-          (Route<dynamic> route) => false);
-    } on FirebaseAuthException catch (e) {
-      print(e.toString());
-      if (e.code == 'invalid-email') {
-        scaffoldMessenger(context, 'Invalid Email');
-      } else if (e.code == 'weak-password') {
-        scaffoldMessenger(context, 'Password min length 6');
-      } else if (e.code == 'email-already-in-use') {
-        scaffoldMessenger(context, 'Email in use');
-      }
-    }
-  }
-
-  void scaffoldMessenger(BuildContext context, String value) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      backgroundColor: Color.fromARGB(188, 57, 19, 194),
-      content: Text(
-        value,
-        style: GoogleFonts.lato(
-          color: Colors.white,
-        ),
-      ),
-    ));
   }
 }
