@@ -27,8 +27,7 @@ class _AutheticationPageState extends State<AutheticationPage> {
   final email = TextEditingController();
   final senha = TextEditingController();
   FirebaseFirestore db = FirebaseFirestore.instance;
-
-  final ServiceAuthentication service = ServiceAuthentication();
+  final CalendarCubit _cubit = CalendarCubit();
 
   bool visibility_pass = false;
 
@@ -40,11 +39,19 @@ class _AutheticationPageState extends State<AutheticationPage> {
       print("completed");
       setState(() {});
     });
+    FirebaseAuth.instance.authStateChanges().listen((User? event) {
+      if (event != null) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => HomeApp()),
+            (route) => false);
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final CalendarCubit _cubit = context.read<CalendarCubit>();
+    final ServiceAuthentication service = ServiceAuthentication();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xFFF5F5F5),
@@ -186,7 +193,7 @@ class _AutheticationPageState extends State<AutheticationPage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => RegisterScreen()));
+                            builder: (context) => const RegisterScreen()));
                   },
                 )
               ],
