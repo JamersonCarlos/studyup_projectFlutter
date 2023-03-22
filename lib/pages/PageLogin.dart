@@ -39,14 +39,17 @@ class _AutheticationPageState extends State<AutheticationPage> {
       print("completed");
       setState(() {});
     });
-    FirebaseAuth.instance.authStateChanges().listen((User? event) {
-      if (event != null) {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => HomeApp()),
-            (route) => false);
-      }
-    });
+    // FirebaseAuth.instance.authStateChanges().listen((User? event) {
+    //   if (event != null) {
+    //     Navigator.pushAndRemoveUntil(
+    //         context,
+    //         MaterialPageRoute(
+    //             builder: (context) => HomeApp(
+    //                   user: event,
+    //                 )),
+    //         (route) => false);
+    //   }
+    // });
   }
 
   @override

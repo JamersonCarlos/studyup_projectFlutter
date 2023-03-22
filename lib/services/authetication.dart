@@ -31,12 +31,9 @@ class ServiceAuthentication {
           .signInWithEmailAndPassword(email: email, password: password);
       if (user != null) {
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) {
-          return BlocProvider<CalendarCubit>.value(
-            value: _cubit,
-            child: const CalendarPage(),
-          );
-        }), (Route<dynamic> route) => false);
+            MaterialPageRoute(
+                builder: (context) => HomeApp(user: user.user!.uid)),
+            (Route<dynamic> route) => false);
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -59,9 +56,11 @@ class ServiceAuthentication {
     try {
       UserCredential user = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email.trim(), password: senha);
-      final new_user = <String, String>{
+      final new_user = <String, dynamic>{
         "username": username,
         "email": email,
+        "disciplinas": [],
+        "horários_livres": []
       };
 
       //Add new user in collection users
