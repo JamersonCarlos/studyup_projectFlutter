@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/cubits/calendar/calendar_cubit.dart';
 import 'package:flutter_application_1/pages/PageLogin.dart';
 import 'package:flutter_application_1/services/authetication.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -21,7 +22,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController email = TextEditingController();
   TextEditingController pass = TextEditingController();
   FirebaseFirestore db = FirebaseFirestore.instance;
-  ServiceAuthentication service = ServiceAuthentication();
+  final CalendarCubit _cubit = CalendarCubit();
 
   bool validator_email = false;
   bool validator_pass = false;
@@ -29,6 +30,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ServiceAuthentication service = ServiceAuthentication();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xFFF5F5F5),
@@ -153,8 +155,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 IconButton(
                     onPressed: () {
                       // FocusScope.of(context).requestFocus(FocusNode());
-                      service.signUp(
-                          context, email.text, pass.text, username.text);
+                      service.signUp(context, _cubit, email.text, pass.text,
+                          username.text);
                     },
                     iconSize: 45,
                     icon: SvgPicture.asset('assets/img/button.svg'))

@@ -31,12 +31,9 @@ class ServiceAuthentication {
           .signInWithEmailAndPassword(email: email, password: password);
       if (user != null) {
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) {
-          return BlocProvider<CalendarCubit>.value(
-            value: _cubit,
-            child: const CalendarPage(),
-          );
-        }), (Route<dynamic> route) => false);
+            MaterialPageRoute(
+                builder: (context) => HomeApp(user: user.user!.uid)),
+            (Route<dynamic> route) => false);
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -54,22 +51,28 @@ class ServiceAuthentication {
     }
   }
 
-  void signUp(
-      BuildContext context, String email, String senha, String username) async {
+  void signUp(BuildContext context, CalendarCubit _cubit, String email,
+      String senha, String username) async {
     try {
       UserCredential user = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email.trim(), password: senha);
-      final new_user = <String, String>{
+      final new_user = <String, dynamic>{
         "username": username,
         "email": email,
+        "disciplinas": [],
+        "horários_livres": []
       };
 
       //Add new user in collection users
       db.collection('users').doc(user.user!.uid).set(new_user);
 
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => AutheticationPage()),
-          (Route<dynamic> route) => false);
+          MaterialPageRoute(builder: (context) {
+        return BlocProvider<CalendarCubit>.value(
+          value: _cubit,
+          child: const AutheticationPage(),
+        );
+      }), (Route<dynamic> route) => false);
     } on FirebaseAuthException catch (e) {
       print(e.toString());
       if (e.code == 'invalid-email') {

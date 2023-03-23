@@ -39,13 +39,16 @@ dependencies:
   google_fonts: ^4.0.3
   firebase_core: ^2.5.0
   firebase_auth: ^4.2.6
-  flutter_svg: ^2.0.1
+  flutter_svg: ^2.0.4
   flutter_bloc:
   bloc:
   get_it:
   table_calendar: ^3.0.8
   intl: ^0.17.0
   cloud_firestore: ^4.0.0
+  font_awesome_flutter: ^10.4.0
+  water_drop_nav_bar: ^2.2.0+5
+  circle_nav_bar: ^2.0.1+1
 
 dev_dependencies:
   flutter_test:
@@ -80,6 +83,7 @@ flutter:
       - assets/img/button.svg
       - assets/img/bottom_background.svg
       - assets/img/bottom_background1.svg
+      - assets/img/icon_config.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
