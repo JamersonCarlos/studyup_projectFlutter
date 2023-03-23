@@ -30,7 +30,7 @@ class _HomeAppState extends State<HomeApp> {
   TextEditingController time_subject = TextEditingController();
 
   PageController pageController = PageController(
-    initialPage: 0,
+    initialPage: 1,
     keepPage: true,
   );
 
@@ -86,8 +86,9 @@ class _HomeAppState extends State<HomeApp> {
               color: Colors.white,
             ),
             Icon(
-              Icons.list_alt,
+              Icons.home,
               color: Colors.white,
+              size: 25,
             ),
             Icon(
               FontAwesomeIcons.clipboardUser,
