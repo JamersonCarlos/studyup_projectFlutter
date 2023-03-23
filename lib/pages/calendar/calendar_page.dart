@@ -16,7 +16,6 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     late CalendarCubit _cubit = context.read<CalendarCubit>();
     return Scaffold(
-      appBar: AppBar(),
       body: Column(
         children: [
           BlocConsumer<CalendarCubit, CalendarState>(
