@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:flutter_application_1/models/anotations.dart';
+
 class Disciplinas {
   final String title;
   final DateTime initial; //data de inicio
@@ -9,8 +11,7 @@ class Disciplinas {
   final String label; //  uma cor de referencia
   late List<String> events; //eventos importantes associados a diciplina/meta
 
-  late List<String>
-      anotation; // anotaçoes que ele pode fazer ao fim de cada encontro
+  late List<Anotation> anotation; // anotaçoes que ele pode fazer ao fim de cada encontro
   late List<String> hoarios_gerados_pela_ia;
 
   Disciplinas({
@@ -28,13 +29,13 @@ class Disciplinas {
     int? horas_dedicadas_por_semana,
     DateTime? expired,
     String? label,
-    List<String>? anotation,
+    List<Anotation>? anotation,
   }) {
     return Disciplinas(
       title: title ?? this.title,
       initial: initial ?? this.initial,
       horas_dedicadas_por_semana:
-          horas_dedicadas_por_semana ?? this.horas_dedicadas_por_semana,
+      horas_dedicadas_por_semana ?? this.horas_dedicadas_por_semana,
       expired: expired ?? this.expired,
       label: label ?? this.label,
       anotation: anotation ?? this.anotation,
@@ -59,7 +60,7 @@ class Disciplinas {
       horas_dedicadas_por_semana: map['horas_dedicadas_por_semana'] as int,
       expired: map['expired'] as DateTime,
       label: map['label'] as String,
-      anotation: map['anotation'] as List<String>,
+      anotation: map['anotation'] as List<Anotation>,
     );
   }
 
