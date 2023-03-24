@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       title: 'Study Up',
       home: BlocProvider(
         create: (context) => CalendarCubit(),
-        child: const FormTime(),
+        child: const AutheticationPage(),
       ),
       theme: ThemeData(primarySwatch: Colors.indigo, useMaterial3: true),
     );
