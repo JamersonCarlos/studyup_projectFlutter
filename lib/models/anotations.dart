@@ -2,11 +2,11 @@
 import 'dart:convert';
 
 class Anotation {
-  late final DateTime envio;
-  late final String description;
-  late final List<String> videos;
-  late final List<String> imagens;
-  late final List<String> audios;
+   final DateTime envio;
+   final String description;
+   final List<String> videos;
+   final List<String> imagens;
+   final List<String> audios;
   Anotation({
     required this.envio,
     required this.description,
