@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'cubits/calendar/calendar_cubit.dart';
+import 'pages/PageFreeTime.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
       title: 'Study Up',
       home: BlocProvider(
         create: (context) => CalendarCubit(),
-        child: const AutheticationPage(),
+        child: const FormTime(),
       ),
       theme: ThemeData(primarySwatch: Colors.indigo, useMaterial3: true),
     );
