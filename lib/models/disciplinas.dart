@@ -10,7 +10,6 @@ class Disciplinas {
   final DateTime expired; // data de termino
   final String label; //  uma cor de referencia
   late List<String> events; //eventos importantes associados a diciplina/meta
-
   late List<Anotation> anotation; // anotaçoes que ele pode fazer ao fim de cada encontro
   late List<String> hoarios_gerados_pela_ia;
 
