@@ -190,11 +190,19 @@ class _HomeAppState extends State<HomeApp> {
                                         borderRadius: BorderRadius.circular(3),
                                       ),
                                     ),
-                                    child: time_selected == null
-                                        ? Text(DateFormat("yyyy-MM-dd")
-                                            .format(DateTime.now()))
-                                        : Text(DateFormat("yyyy-MM-dd")
-                                            .format(time_selected)),
+                                    child: Row(
+                                      children: [
+                                        const Icon(Icons.calendar_month),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        time_selected == null
+                                            ? Text(DateFormat("dd-MM-yyyy")
+                                                .format(DateTime.now()))
+                                            : Text(DateFormat("dd-MM-yyyy")
+                                                .format(time_selected)),
+                                      ],
+                                    ),
                                     onPressed: () async {
                                       var datePicked =
                                           await DatePicker.showSimpleDatePicker(
@@ -215,7 +223,7 @@ class _HomeAppState extends State<HomeApp> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.all(8),
+                                  padding: const EdgeInsets.all(8),
                                   child: TextFormField(
                                     cursorColor: Colors.white,
                                     maxLength: 16,
@@ -272,6 +280,7 @@ class _HomeAppState extends State<HomeApp> {
                                         if (name_subject.text.isNotEmpty &&
                                             time_subject.text.isNotEmpty &&
                                             time_selected != null) {
+                                          //define new subject using subject model
                                           Map<String, dynamic> newSubject =
                                               Disciplinas(
                                                   title: name_subject.text,
