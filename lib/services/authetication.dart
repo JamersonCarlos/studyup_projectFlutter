@@ -11,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import '../cubits/calendar/calendar_cubit.dart';
+import '../pages/PageFreeTime.dart';
 import '../pages/PageLogin.dart';
 import '../pages/calendar/calendar_page.dart';
 
@@ -24,16 +25,31 @@ class ServiceAuthentication {
   ServiceAuthentication();
   FirebaseFirestore db = FirebaseFirestore.instance;
 
+  Future<List<dynamic>> first_login(String user) async {
+    DocumentSnapshot doc = await db.collection("users").doc(user).get();
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    return data["horários_livres"];
+  }
+
   void doLogin(BuildContext context, CalendarCubit _cubit, String email,
       String password) async {
+    var data;
     try {
       UserCredential user = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       if (user != null) {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-                builder: (context) => HomeApp(user: user.user!.uid)),
-            (Route<dynamic> route) => false);
+        List data = await first_login(user.user!.uid);
+        if (data.isNotEmpty) {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) => HomeApp(user: user.user!.uid)),
+              (Route<dynamic> route) => false);
+        } else {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) => FormTime(uid: user.user!.uid)),
+              (Route<dynamic> route) => false);
+        }
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -56,7 +72,7 @@ class ServiceAuthentication {
     try {
       UserCredential user = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email.trim(), password: senha);
-      final new_user = <String, dynamic>{
+      final newUser = <String, dynamic>{
         "username": username,
         "email": email,
         "disciplinas": [],
@@ -64,7 +80,7 @@ class ServiceAuthentication {
       };
 
       //Add new user in collection users
-      db.collection('users').doc(user.user!.uid).set(new_user);
+      db.collection('users').doc(user.user!.uid).set(newUser);
 
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) {

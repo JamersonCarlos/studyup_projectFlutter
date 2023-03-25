@@ -7,6 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:time_picker_spinner_pop_up/time_picker_spinner_pop_up.dart';
 
+import 'home.dart';
+
 class FormTime extends StatefulWidget {
   const FormTime({super.key, required this.uid});
 
@@ -18,6 +20,7 @@ class FormTime extends StatefulWidget {
 
 class _FormTimeState extends State<FormTime> {
   Time _time = Time(hour: 11, minute: 30, second: 20);
+  FirebaseFirestore db = FirebaseFirestore.instance;
 
   final List<String> days_week = [
     "Segunda-feira",
@@ -217,12 +220,12 @@ class _FormTimeState extends State<FormTime> {
               ),
               onPressed: () {
                 List<dynamic> listInvalid = [];
+                List<dynamic> listvalid = [];
                 for (int i = 0; i < free_times.length; i++) {
                   if (TimeValid(
                       free_times[i][0]["start"], free_times[i][0]["end"])) {
+                    listvalid.add(free_times[i][0]);
                   } else {
-                    print(i);
-                    print(free_times[i][0]);
                     listInvalid.add(free_times[i][0]);
                   }
                 }
@@ -239,7 +242,16 @@ class _FormTimeState extends State<FormTime> {
                     ),
                   );
                 } else {
-                  print("formulário tá show");
+                  db.collection("users").doc(widget.uid).set(
+                      {"horários_livres": listvalid},
+                      SetOptions(merge: true)).then(
+                    (value) {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => HomeApp(user: widget.uid)),
+                          (Route<dynamic> route) => false);
+                    },
+                  );
                 }
               },
               child: Text(
