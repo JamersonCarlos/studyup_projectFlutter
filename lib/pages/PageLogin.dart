@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_1/models/notifications.dart';
 import 'package:flutter_application_1/pages/PageRegister.dart';
 import 'package:flutter_application_1/pages/home.dart';
 import 'package:flutter_application_1/services/authetication.dart';
@@ -13,6 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import '../cubits/calendar/calendar_cubit.dart';
+import '../cubits/nofications/notifications_cubit.dart';
 import 'calendar/calendar_page.dart';
 
 class AutheticationPage extends StatefulWidget {
@@ -37,7 +39,8 @@ class _AutheticationPageState extends State<AutheticationPage> {
     super.initState();
     Firebase.initializeApp().whenComplete(() {
       print("completed");
-      setState(() {});
+
+     // checkNotification();
     });
     // FirebaseAuth.instance.authStateChanges().listen((User? event) {
     //   if (event != null) {
@@ -205,5 +208,17 @@ class _AutheticationPageState extends State<AutheticationPage> {
         ],
       ),
     );
+  }
+
+  void checkNotification() async {
+    final notificationWelcome = ReceivedNotification(
+        id: 1,
+        title: 'Bem vindo ao Study UP',
+        body: 'Agende suas disciplinas agora',
+        payload: 'payload');
+
+    final managerNotification = context.read<NotificationsCubit>();
+    await managerNotification.checkForNotifications();
+    managerNotification.showNotfication(notificationWelcome);
   }
 }

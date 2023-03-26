@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/cubits/nofications/notifications_cubit.dart';
 import 'package:flutter_application_1/firebase_options.dart';
 import 'package:flutter_application_1/pages/PageRegister.dart';
 import 'package:flutter_application_1/pages/home.dart';
@@ -24,8 +25,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Study Up',
-      home: BlocProvider(
-        create: (context) => CalendarCubit(),
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => CalendarCubit()),
+          BlocProvider(create: (context) => NotificationsCubit()),
+        ],
+
         child: const AutheticationPage(),
       ),
       theme: ThemeData(primarySwatch: Colors.indigo, useMaterial3: true),
