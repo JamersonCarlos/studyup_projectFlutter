@@ -12,6 +12,7 @@ import 'cubits/calendar/calendar_cubit.dart';
 import 'pages/PageFreeTime.dart';
 
 void main() async {
+    
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   initializeDateFormatting().then((_) => runApp(const MyApp()));

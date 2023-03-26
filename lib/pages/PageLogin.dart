@@ -37,10 +37,10 @@ class _AutheticationPageState extends State<AutheticationPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    
     Firebase.initializeApp().whenComplete(() {
+      checkNotification();
       print("completed");
-
-     // checkNotification();
     });
     // FirebaseAuth.instance.authStateChanges().listen((User? event) {
     //   if (event != null) {
@@ -210,7 +210,8 @@ class _AutheticationPageState extends State<AutheticationPage> {
     );
   }
 
-  void checkNotification() async {
+  checkNotification() async {
+    print('emitindo notificacao');
     final notificationWelcome = ReceivedNotification(
         id: 1,
         title: 'Bem vindo ao Study UP',
@@ -218,7 +219,7 @@ class _AutheticationPageState extends State<AutheticationPage> {
         payload: 'payload');
 
     final managerNotification = context.read<NotificationsCubit>();
-    await managerNotification.checkForNotifications();
     managerNotification.showNotfication(notificationWelcome);
+    await managerNotification.checkForNotifications();
   }
 }

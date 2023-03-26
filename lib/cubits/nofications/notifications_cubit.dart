@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/data/latest.dart' as tzData;
 
 import '../../models/notifications.dart';
 
@@ -12,12 +12,13 @@ part 'notifications_state.dart';
 class NotificationsCubit extends Cubit<NotificationsState> {
   late AndroidNotificationDetails androidNotification;
   late FlutterLocalNotificationsPlugin localNotificationsPlugin;
-  NotificationsCubit() : super(NotificationsInitial());
-
-  constructor() {
+  
+  NotificationsCubit() : super(NotificationsInitial()) {
     localNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    localNotificationsPlugin.resolvePlatformSpecificImplementation<
+    AndroidFlutterLocalNotificationsPlugin>()?.requestPermission();
     _setupNotifications();
-  }
+  } 
 
   _setupNotifications() async {
     await _setupTimezone();
@@ -25,14 +26,18 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   }
 
   Future<void> _setupTimezone() async {
-    tz.initializeTimeZones();
-    final String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation(timeZoneName));
+    tzData.initializeTimeZones();
+    final tzName = await FlutterNativeTimezone.getLocalTimezone();
+    if(tzName != "GMT"){
+    tz.setLocalLocation(tz.getLocation(tzName));
+    }
   }
 
   Future<void> _initializeNotifications() async {
     const android = AndroidInitializationSettings(
         '@mipmap/ic_launcher'); // adiciona um icone as notificacoes
+
+  
     await localNotificationsPlugin.initialize(
       const InitializationSettings(
         android: android,
@@ -52,7 +57,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     androidNotification = const AndroidNotificationDetails(
         'Lembrentes_notifications',
         'lembretes',
-        'Este e o canal para lembretes',
+        channelDescription: 'Este e o canal para lembretes',
         importance: Importance.max,
         priority: Priority.max,
         enableVibration: true);
