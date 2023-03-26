@@ -1,12 +1,17 @@
 import 'package:circle_nav_bar/circle_nav_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/disciplinas.dart';
 import 'package:flutter_application_1/pages/calendar/calendar_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:time_picker_spinner_pop_up/time_picker_spinner_pop_up.dart';
 import 'package:water_drop_nav_bar/water_drop_nav_bar.dart';
 
 import '../cubits/calendar/calendar_cubit.dart';
@@ -33,6 +38,8 @@ class _HomeAppState extends State<HomeApp> {
     initialPage: 1,
     keepPage: true,
   );
+
+  var time_selected;
 
   @override
   Widget build(BuildContext context) {
@@ -158,112 +165,169 @@ class _HomeAppState extends State<HomeApp> {
                 backgroundColor: Color.fromARGB(160, 3, 5, 94),
                 elevation: 10,
                 shadowColor: Color(0xFF03045E),
-                content: Container(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "Nova Disciplina",
-                        style: GoogleFonts.roboto(
-                            color: Colors.white, fontSize: 20),
-                      ),
-                      Form(
-                        key: _formKey,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(8),
-                              child: TextFormField(
-                                cursorColor: Colors.white,
-                                maxLength: 16,
-                                controller: name_subject,
-                                decoration: const InputDecoration(
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white),
-                                  ),
-                                  labelText: "Nome da Disciplina",
-                                  labelStyle: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 8, left: 8, right: 8, bottom: 20),
-                              child: TextFormField(
-                                cursorColor: Colors.white,
-                                controller: time_subject,
-                                keyboardType: TextInputType.number,
-                                decoration: const InputDecoration(
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white),
-                                  ),
-                                  labelText: "Horas Dedicação",
-                                  labelStyle: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                content: StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState1) {
+                    return Container(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Form(
+                            key: _formKey,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                ElevatedButton(
-                                  onPressed: () {
-                                    name_subject.clear();
-                                    time_subject.clear();
-                                    Navigator.of(context).pop();
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.red),
-                                  child: Text(
-                                    "Cancelar",
-                                    style:
-                                        GoogleFonts.roboto(color: Colors.white),
+                                Text(
+                                  "Quando quer finalizar ?",
+                                  style: GoogleFonts.roboto(
+                                      color: Colors.white, fontSize: 16),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(3),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const Icon(Icons.calendar_month),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        time_selected == null
+                                            ? Text(DateFormat("dd-MM-yyyy")
+                                                .format(DateTime.now()))
+                                            : Text(DateFormat("dd-MM-yyyy")
+                                                .format(time_selected)),
+                                      ],
+                                    ),
+                                    onPressed: () async {
+                                      var datePicked =
+                                          await DatePicker.showSimpleDatePicker(
+                                        context,
+                                        initialDate:
+                                            DateTime(DateTime.now().year),
+                                        firstDate: DateTime(2023),
+                                        lastDate: DateTime(2040),
+                                        dateFormat: "dd-MMMM-yyyy",
+                                        locale: DateTimePickerLocale.pt_br,
+                                        looping: true,
+                                      ).then((value) {
+                                        setState1(() {
+                                          time_selected = value;
+                                        });
+                                      });
+                                    },
                                   ),
                                 ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    if (name_subject.text.isNotEmpty &&
-                                        time_subject.text.isNotEmpty) {
-                                      setState(
-                                        () {
-                                          db
-                                              .collection("users")
-                                              .doc(widget.user)
-                                              .update(
-                                            {
-                                              "disciplinas":
-                                                  FieldValue.arrayUnion(
-                                                [
-                                                  {
-                                                    "horas_dedicadas":
-                                                        int.parse(
-                                                            time_subject.text),
-                                                    "nome": name_subject.text
-                                                  }
-                                                ],
-                                              )
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: TextFormField(
+                                    cursorColor: Colors.white,
+                                    maxLength: 16,
+                                    controller: name_subject,
+                                    decoration: const InputDecoration(
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white),
+                                      ),
+                                      labelText: "Nome da Disciplina",
+                                      labelStyle:
+                                          TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 8, left: 8, right: 8, bottom: 20),
+                                  child: TextFormField(
+                                    cursorColor: Colors.white,
+                                    controller: time_subject,
+                                    keyboardType: TextInputType.number,
+                                    decoration: const InputDecoration(
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white),
+                                      ),
+                                      labelText: "Horas Dedicação",
+                                      labelStyle:
+                                          TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        name_subject.clear();
+                                        time_subject.clear();
+                                        Navigator.of(context).pop();
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red),
+                                      child: Text(
+                                        "Cancelar",
+                                        style: GoogleFonts.roboto(
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        if (name_subject.text.isNotEmpty &&
+                                            time_subject.text.isNotEmpty &&
+                                            time_selected != null) {
+                                          //define new subject using subject model
+                                          Map<String, dynamic> newSubject =
+                                              Disciplinas(
+                                                  title: name_subject.text,
+                                                  initial: DateTime.now(),
+                                                  horas_dedicadas_por_semana:
+                                                      int.parse(
+                                                          time_subject.text),
+                                                  expired: time_selected,
+                                                  label: "",
+                                                  anotation: []).toMap();
+
+                                          //send data of firestore database
+                                          setState(
+                                            () {
+                                              db
+                                                  .collection("users")
+                                                  .doc(widget.user)
+                                                  .update(
+                                                {
+                                                  "disciplinas":
+                                                      FieldValue.arrayUnion(
+                                                    [newSubject],
+                                                  )
+                                                },
+                                              );
                                             },
                                           );
-                                        },
-                                      );
-                                      Navigator.of(context).pop();
-                                    }
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.greenAccent),
-                                  child: Text(
-                                    "Adicionar",
-                                    style:
-                                        GoogleFonts.roboto(color: Colors.white),
-                                  ),
+                                          Navigator.of(context).pop();
+                                        }
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.greenAccent),
+                                      child: Text(
+                                        "Adicionar",
+                                        style: GoogleFonts.roboto(
+                                            color: Colors.white),
+                                      ),
+                                    )
+                                  ],
                                 )
                               ],
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  },
                 ));
           }));
     }

@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter_application_1/models/anotations.dart';
+import 'package:intl/intl.dart';
 
 class Disciplinas {
   final String title;
@@ -44,9 +45,9 @@ class Disciplinas {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'title': title,
-      'initial': initial,
+      'initial': DateFormat("dd-MMMM-yyyy").format(initial),
       'horas_dedicadas_por_semana': horas_dedicadas_por_semana,
-      'expired': expired,
+      'expired': DateFormat("dd-MMMM-yyyy").format(expired),
       'label': label,
       'anotation': anotation,
     };

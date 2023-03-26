@@ -171,10 +171,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: [
                     SvgPicture.asset('assets/img/bottom_background.svg'),
                     TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
                         child: const Icon(
                           Icons.arrow_circle_left,
-                          color: Color(0xFFBD33D3),
+                          color: Color(0xFF03045E),
                           size: 50,
                         )),
                   ],

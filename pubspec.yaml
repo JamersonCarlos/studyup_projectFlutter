@@ -52,6 +52,9 @@ dependencies:
   flutter_local_notifications: ^8.2.0
   timezone: ^0.8.0
   flutter_native_timezone: ^2.0.0
+  time_picker_spinner_pop_up: ^1.0.3
+  flutter_holo_date_picker: ^1.1.0
+  day_night_time_picker: ^1.2.0+2
 
 dev_dependencies:
   flutter_test:
@@ -87,6 +90,7 @@ flutter:
       - assets/img/bottom_background.svg
       - assets/img/bottom_background1.svg
       - assets/img/icon_config.svg
+      - assets/img/free_time.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

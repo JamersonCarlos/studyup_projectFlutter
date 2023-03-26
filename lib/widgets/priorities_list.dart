@@ -60,7 +60,7 @@ class _ListPrioritiesState extends State<ListPriorities> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(list[index]["nome"],
+                            Text(list[index]["title"],
                                 style: GoogleFonts.roboto(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -69,7 +69,7 @@ class _ListPrioritiesState extends State<ListPriorities> {
                               children: [
                                 const Icon(Icons.timelapse_sharp),
                                 Text(
-                                  "  ${list[index]["horas_dedicadas"]} horas",
+                                  "  ${list[index]["horas_dedicadas_por_semana"]} horas",
                                   style: GoogleFonts.roboto(
                                       fontWeight: FontWeight.bold),
                                 ),
