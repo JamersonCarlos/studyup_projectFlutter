@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_application_1/models/notifications.dart';
 import 'package:flutter_application_1/pages/PageRegister.dart';
 import 'package:flutter_application_1/pages/home.dart';
-import 'package:flutter_application_1/services/authetication.dart';
+import 'package:flutter_application_1/services/authetication_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -29,18 +29,16 @@ class _AutheticationPageState extends State<AutheticationPage> {
   final email = TextEditingController();
   final senha = TextEditingController();
   FirebaseFirestore db = FirebaseFirestore.instance;
-  final CalendarCubit _cubit = CalendarCubit();
+  
 
   bool visibility_pass = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    
     Firebase.initializeApp().whenComplete(() {
-      checkNotification();
       print("completed");
+      checkNotification();
     });
     // FirebaseAuth.instance.authStateChanges().listen((User? event) {
     //   if (event != null) {
@@ -55,9 +53,26 @@ class _AutheticationPageState extends State<AutheticationPage> {
     // });
   }
 
+ checkNotification() async {
+    print('emitindo notificacao');
+    final notificationWelcome = ReceivedNotification(
+        id: 1,
+        title: 'Bem vindo ao Study UP',
+        body: 'Agende suas disciplinas agora',
+        payload: 'payload');
+
+    final managerNotification = context.read<NotificationsCubit>();
+    managerNotification.initialize();
+    managerNotification.notificationsService
+        .showNotfication(notificationWelcome);
+    await managerNotification.notificationsService.checkForNotifications();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final ServiceAuthentication service = ServiceAuthentication();
+    final CalendarCubit _cubit = context.read<CalendarCubit>();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xFFF5F5F5),
@@ -210,16 +225,4 @@ class _AutheticationPageState extends State<AutheticationPage> {
     );
   }
 
-  checkNotification() async {
-    print('emitindo notificacao');
-    final notificationWelcome = ReceivedNotification(
-        id: 1,
-        title: 'Bem vindo ao Study UP',
-        body: 'Agende suas disciplinas agora',
-        payload: 'payload');
-
-    final managerNotification = context.read<NotificationsCubit>();
-    managerNotification.showNotfication(notificationWelcome);
-    await managerNotification.checkForNotifications();
-  }
 }

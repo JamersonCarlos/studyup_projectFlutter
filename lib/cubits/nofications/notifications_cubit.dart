@@ -1,88 +1,51 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tzData;
+
 
 import '../../models/notifications.dart';
+import '../../services/notifications_service.dart';
 
 part 'notifications_state.dart';
 
 class NotificationsCubit extends Cubit<NotificationsState> {
-  late AndroidNotificationDetails androidNotification;
-  late FlutterLocalNotificationsPlugin localNotificationsPlugin;
-  
-  NotificationsCubit() : super(NotificationsInitial()) {
-    localNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    localNotificationsPlugin.resolvePlatformSpecificImplementation<
-    AndroidFlutterLocalNotificationsPlugin>()?.requestPermission();
-    _setupNotifications();
-  } 
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  final NotificationsService notificationsService = NotificationsService();
 
-  _setupNotifications() async {
-    await _setupTimezone();
-    await _initializeNotifications();
-  }
+  NotificationsCubit() : super(NotificationsInitial()){}
 
-  Future<void> _setupTimezone() async {
-    tzData.initializeTimeZones();
-    final tzName = await FlutterNativeTimezone.getLocalTimezone();
-    if(tzName != "GMT"){
-    tz.setLocalLocation(tz.getLocation(tzName));
-    }
-  }
-
-  Future<void> _initializeNotifications() async {
-    const android = AndroidInitializationSettings(
-        '@mipmap/ic_launcher'); // adiciona um icone as notificacoes
-
-  
-    await localNotificationsPlugin.initialize(
-      const InitializationSettings(
-        android: android,
-      ),
-      onSelectNotification: _onSelectNotification,
+  Future<void> initialize() async {
+    await _firebaseMessaging.setForegroundNotificationPresentationOptions(
+      badge: true,
+      sound: true,
     );
+    // _firebaseMessaging.subscribeToTopic('all');
+    _firebaseMessaging.getToken().then((token) => print(token));
+    _onMessage();
   }
 
-  Future<void> _onSelectNotification(String? payload) async {
-    if (payload != null && payload!.isNotEmpty) {
-      print("usuario clickou na notificaçao");
-    }
-  }
+  void _onMessage() {
+    FirebaseMessaging.onMessage.listen((message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
 
-  showNotfication(ReceivedNotification notification) {
-
-    androidNotification = const AndroidNotificationDetails(
-        'Lembrentes_notifications',
-        'lembretes',
-        channelDescription: 'Este e o canal para lembretes',
-        importance: Importance.max,
-        priority: Priority.max,
-        enableVibration: true);
-
-    DateTime date = DateTime.now().add(const Duration(seconds: 4));
-    localNotificationsPlugin.zonedSchedule(
-        notification.id,
-        notification.title,
-        notification.body,
-        tz.TZDateTime.from(date,tz.local),
-        NotificationDetails(
-          android: androidNotification,
-        ),
-        payload: notification.payload,
-        androidAllowWhileIdle: true,
-        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime
+      if (notification != null && android != null) {
+        notificationsService.showNotfication(
+          ReceivedNotification(
+              id: android.hashCode,
+              title: notification.title,
+              body: notification.body,
+              payload: message.data['route'] ?? ''),
         );
+      }
+    });
   }
 
-  checkForNotifications() async {
-    final details =
-        await localNotificationsPlugin.getNotificationAppLaunchDetails();
-    if (details != null && details.didNotificationLaunchApp) {
-      _onSelectNotification(details.payload);
-    }
+  _onMessageOpenedApp() {
+    FirebaseMessaging.onMessageOpenedApp.listen(_goToRoute);
   }
-  
+
+  _goToRoute(message) {
+    print('rotas excutadas');
+  }
 }

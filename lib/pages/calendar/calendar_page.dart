@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/cubits/calendar/calendar_cubit.dart';
-import 'package:flutter_application_1/pages/calendar/width/event.dart';
+import 'package:flutter_application_1/pages/calendar/widget/event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -41,6 +41,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 calendarFormat: _cubit.calendarFormat,
                 onFormatChanged: (format) => _cubit.changeCalendar(format),
                 onDaySelected: (selectedDay, focusedDay) {
+                  
                   print('dey selected ' + selectedDay.toIso8601String());
                 },
               );

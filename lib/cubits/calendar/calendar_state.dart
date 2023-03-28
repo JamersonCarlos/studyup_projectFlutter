@@ -11,3 +11,9 @@ class CalendarChange extends CalendarState {
   CalendarChange({required this.change});
 
 }
+class CalendarListEvents extends CalendarState {
+  final List<EventWidget> events;
+
+  CalendarListEvents({required this.events});
+
+}

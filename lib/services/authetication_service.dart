@@ -1,21 +1,16 @@
-import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_application_1/pages/PageRegister.dart';
-import 'package:flutter_application_1/pages/home.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:google_fonts/google_fonts.dart';
-import 'package:firebase_core/firebase_core.dart';
+
+import 'package:flutter_application_1/pages/home.dart';
 
 import '../cubits/calendar/calendar_cubit.dart';
 import '../pages/PageFreeTime.dart';
 import '../pages/PageLogin.dart';
-import '../pages/calendar/calendar_page.dart';
-
-import 'package:flutter/widgets.dart';
 
 class ServiceAuthentication {
   // late BuildContext context;

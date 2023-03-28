@@ -1,7 +1,6 @@
 import 'package:circle_nav_bar/circle_nav_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/disciplinas.dart';
 import 'package:flutter_application_1/pages/calendar/calendar_page.dart';
@@ -11,10 +10,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:time_picker_spinner_pop_up/time_picker_spinner_pop_up.dart';
-import 'package:water_drop_nav_bar/water_drop_nav_bar.dart';
 
 import '../cubits/calendar/calendar_cubit.dart';
+import '../cubits/nofications/notifications_cubit.dart';
+import '../models/notifications.dart';
 import '../widgets/priorities_list.dart';
 
 class HomeApp extends StatefulWidget {
@@ -38,6 +37,11 @@ class _HomeAppState extends State<HomeApp> {
     initialPage: 1,
     keepPage: true,
   );
+  @override
+  void initState() {
+    super.initState();
+    // checkNotification();
+  }
 
   var time_selected;
 
@@ -331,5 +335,20 @@ class _HomeAppState extends State<HomeApp> {
                 ));
           }));
     }
+  }
+
+  checkNotification() async {
+    print('emitindo notificacao');
+    final notificationWelcome = ReceivedNotification(
+        id: 1,
+        title: 'Bem vindo ao Study UP',
+        body: 'Agende suas disciplinas agora',
+        payload: 'payload');
+
+    final managerNotification = context.read<NotificationsCubit>();
+    managerNotification.initialize();
+    managerNotification.notificationsService
+        .showNotfication(notificationWelcome);
+    await managerNotification.notificationsService.checkForNotifications();
   }
 }
