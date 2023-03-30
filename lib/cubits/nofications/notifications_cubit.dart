@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 
-
 import '../../models/notifications.dart';
 import '../../services/notifications_service.dart';
 
@@ -12,7 +11,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   final NotificationsService notificationsService = NotificationsService();
 
-  NotificationsCubit() : super(NotificationsInitial()){}
+  NotificationsCubit() : super(NotificationsInitial()) {}
 
   Future<void> initialize() async {
     await _firebaseMessaging.setForegroundNotificationPresentationOptions(
@@ -20,7 +19,9 @@ class NotificationsCubit extends Cubit<NotificationsState> {
       sound: true,
     );
     // _firebaseMessaging.subscribeToTopic('all');
-    _firebaseMessaging.getToken().then((token) => print(token));
+    _firebaseMessaging
+        .getToken()
+        .then((token) => print("Token = " + token.toString()));
     _onMessage();
   }
 
