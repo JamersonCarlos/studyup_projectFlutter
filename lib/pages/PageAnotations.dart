@@ -282,13 +282,15 @@ class _AnotationsState extends State<Anotations> {
                   )
                 ],
               ),
-              Text(
-                "Imagens",
-                style: GoogleFonts.roboto(
-                    color: Colors.blueAccent,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-              ),
+              selectImages.isNotEmpty
+                  ? Text(
+                      "Imagens",
+                      style: GoogleFonts.roboto(
+                          color: Colors.blueAccent,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    )
+                  : Container(),
               Padding(
                 padding: const EdgeInsets.only(top: 15),
                 child: Container(
@@ -414,12 +416,6 @@ class _AnotationsState extends State<Anotations> {
                         });
                       }
                     }),
-                SpeedDialChild(
-                  elevation: 0,
-                  backgroundColor: Colors.amberAccent,
-                  shape: StadiumBorder(),
-                  child: Icon(Icons.mic_outlined),
-                )
               ],
             )
           : null,
