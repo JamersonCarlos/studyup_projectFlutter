@@ -9,9 +9,11 @@ import 'package:flutter_application_1/pages/PageRegister.dart';
 import 'package:flutter_application_1/pages/home.dart';
 import 'package:flutter_application_1/services/authetication_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../cubits/calendar/calendar_cubit.dart';
 import '../cubits/nofications/notifications_cubit.dart';
@@ -29,9 +31,9 @@ class _AutheticationPageState extends State<AutheticationPage> {
   final email = TextEditingController();
   final senha = TextEditingController();
   FirebaseFirestore db = FirebaseFirestore.instance;
-  
 
   bool visibility_pass = false;
+  final recorder = FlutterSoundRecorder();
 
   @override
   void initState() {
@@ -40,6 +42,7 @@ class _AutheticationPageState extends State<AutheticationPage> {
       print("completed");
       checkNotification();
     });
+
     // FirebaseAuth.instance.authStateChanges().listen((User? event) {
     //   if (event != null) {
     //     Navigator.pushAndRemoveUntil(
@@ -53,7 +56,7 @@ class _AutheticationPageState extends State<AutheticationPage> {
     // });
   }
 
- checkNotification() async {
+  checkNotification() async {
     print('emitindo notificacao');
     final notificationWelcome = ReceivedNotification(
         id: 1,
@@ -67,7 +70,6 @@ class _AutheticationPageState extends State<AutheticationPage> {
         .showNotfication(notificationWelcome);
     await managerNotification.notificationsService.checkForNotifications();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -224,5 +226,4 @@ class _AutheticationPageState extends State<AutheticationPage> {
       ),
     );
   }
-
 }

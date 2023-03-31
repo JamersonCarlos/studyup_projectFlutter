@@ -2,14 +2,18 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../models/anotations.dart';
+import '../widgets/audio_list.dart';
+import '../widgets/play_audio.dart';
 
 class Anotations extends StatefulWidget {
   Anotations(
@@ -37,6 +41,7 @@ class _AnotationsState extends State<Anotations> {
   TextEditingController linkInput = TextEditingController();
   List<String> selectImages = [];
   List<String> links = [];
+  List<String> audios = [];
 
   @override
   Widget build(BuildContext context) {
@@ -287,7 +292,7 @@ class _AnotationsState extends State<Anotations> {
               Padding(
                 padding: const EdgeInsets.only(top: 15),
                 child: Container(
-                  height: 150,
+                  height: selectImages.isEmpty ? 0 : 150,
                   child: ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
@@ -309,6 +314,27 @@ class _AnotationsState extends State<Anotations> {
                   ),
                 ),
               ),
+              Text(
+                "Audios",
+                style: GoogleFonts.roboto(
+                    color: Colors.blueAccent,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              ),
+              ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                itemCount: audios.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: playAudio(
+                      filepath: audios[index],
+                    ),
+                  );
+                },
+              ),
+              recorderAudio(addAudio: addAudio),
               const SizedBox(
                 height: 30,
               ),
@@ -328,8 +354,12 @@ class _AnotationsState extends State<Anotations> {
                               ),
                             ),
                             onPressed: () {
-                              newAnotation(titleInput.text,
-                                  descriptionInput.text, selectImages, links);
+                              newAnotation(
+                                  titleInput.text,
+                                  descriptionInput.text,
+                                  selectImages,
+                                  links,
+                                  audios);
                               Navigator.of(context).pop();
                             },
                             child: const Text(
@@ -396,14 +426,20 @@ class _AnotationsState extends State<Anotations> {
     );
   }
 
+  void addAudio(String audioPath) {
+    setState(() {
+      audios.add(audioPath);
+    });
+  }
+
   void newAnotation(String title, String description, List<String> selectImages,
-      List<String> links) {
+      List<String> links, List<String> audios) {
     Map<String, dynamic> newAnotation = Anotation(
         envio: DateFormat("dd-MM-yyyy HH:mm").format(DateTime.now()),
         title: titleInput.text,
         description: descriptionInput.text,
         links: links,
-        audios: [],
+        audios: audios,
         imagens: selectImages,
         videos: []).toMap();
     newAnotation["disciplina"] = widget.title;

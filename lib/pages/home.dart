@@ -10,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../cubits/calendar/calendar_cubit.dart';
 import '../cubits/nofications/notifications_cubit.dart';
@@ -40,7 +41,12 @@ class _HomeAppState extends State<HomeApp> {
   @override
   void initState() {
     super.initState();
+    permissionAudio();
     // checkNotification();
+  }
+
+  Future permissionAudio() async {
+    await Permission.microphone.request();
   }
 
   var time_selected;
