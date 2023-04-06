@@ -28,10 +28,14 @@ class _FormTimeState extends State<FormTime> {
     "Quarta-feira",
     "Quinta-feira",
     "Sexta-feira",
-    "Sábado"
+    "Sábado",
+    "Domingo"
   ];
 
   List<List<Map<String, dynamic>>> free_times = [
+    [
+      {"start": "00:00", "end": "00:00"}
+    ],
     [
       {"start": "00:00", "end": "00:00"}
     ],
