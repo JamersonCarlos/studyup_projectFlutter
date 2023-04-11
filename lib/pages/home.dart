@@ -188,50 +188,9 @@ class _HomeAppState extends State<HomeApp> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  "Quando quer finalizar ?",
+                                  "Adicionar Disciplina",
                                   style: GoogleFonts.roboto(
                                       color: Colors.white, fontSize: 16),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: TextButton(
-                                    style: TextButton.styleFrom(
-                                      backgroundColor: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(3),
-                                      ),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        const Icon(Icons.calendar_month),
-                                        const SizedBox(
-                                          width: 5,
-                                        ),
-                                        time_selected == null
-                                            ? Text(DateFormat("dd-MM-yyyy")
-                                                .format(DateTime.now()))
-                                            : Text(DateFormat("dd-MM-yyyy")
-                                                .format(time_selected)),
-                                      ],
-                                    ),
-                                    onPressed: () async {
-                                      var datePicked =
-                                          await DatePicker.showSimpleDatePicker(
-                                        context,
-                                        initialDate:
-                                            DateTime(DateTime.now().year),
-                                        firstDate: DateTime(2023),
-                                        lastDate: DateTime(2040),
-                                        dateFormat: "dd-MMMM-yyyy",
-                                        locale: DateTimePickerLocale.pt_br,
-                                        looping: true,
-                                      ).then((value) {
-                                        setState1(() {
-                                          time_selected = value;
-                                        });
-                                      });
-                                    },
-                                  ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8),
@@ -289,8 +248,7 @@ class _HomeAppState extends State<HomeApp> {
                                     ElevatedButton(
                                       onPressed: () {
                                         if (name_subject.text.isNotEmpty &&
-                                            time_subject.text.isNotEmpty &&
-                                            time_selected != null) {
+                                            time_subject.text.isNotEmpty) {
                                           //define new subject using subject model
                                           Map<String, dynamic> newSubject =
                                               Disciplinas(
@@ -299,7 +257,6 @@ class _HomeAppState extends State<HomeApp> {
                                                   horas_dedicadas_por_semana:
                                                       int.parse(
                                                           time_subject.text),
-                                                  expired: time_selected,
                                                   label: "",
                                                   anotation: []).toMap();
 
