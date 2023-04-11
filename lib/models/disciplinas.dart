@@ -8,17 +8,16 @@ class Disciplinas {
   final String title;
   final DateTime initial; //data de inicio
   final int horas_dedicadas_por_semana;
-  final DateTime expired; // data de termino
   final String label; //  uma cor de referencia
   late List<String> events; //eventos importantes associados a diciplina/meta
-  late List<Anotation> anotation; // anotaçoes que ele pode fazer ao fim de cada encontro
+  late List<Anotation>
+      anotation; // anotaçoes que ele pode fazer ao fim de cada encontro
   late List<String> hoarios_gerados_pela_ia;
 
   Disciplinas({
     required this.title,
     required this.initial,
     required this.horas_dedicadas_por_semana,
-    required this.expired,
     required this.label,
     required this.anotation,
   });
@@ -27,7 +26,6 @@ class Disciplinas {
     String? title,
     DateTime? initial,
     int? horas_dedicadas_por_semana,
-    DateTime? expired,
     String? label,
     List<Anotation>? anotation,
   }) {
@@ -35,8 +33,7 @@ class Disciplinas {
       title: title ?? this.title,
       initial: initial ?? this.initial,
       horas_dedicadas_por_semana:
-      horas_dedicadas_por_semana ?? this.horas_dedicadas_por_semana,
-      expired: expired ?? this.expired,
+          horas_dedicadas_por_semana ?? this.horas_dedicadas_por_semana,
       label: label ?? this.label,
       anotation: anotation ?? this.anotation,
     );
@@ -47,7 +44,6 @@ class Disciplinas {
       'title': title,
       'initial': DateFormat("dd-MMMM-yyyy").format(initial),
       'horas_dedicadas_por_semana': horas_dedicadas_por_semana,
-      'expired': DateFormat("dd-MMMM-yyyy").format(expired),
       'label': label,
       'anotation': anotation,
     };
@@ -58,7 +54,6 @@ class Disciplinas {
       title: map['title'] as String,
       initial: map['initial'] as DateTime,
       horas_dedicadas_por_semana: map['horas_dedicadas_por_semana'] as int,
-      expired: map['expired'] as DateTime,
       label: map['label'] as String,
       anotation: map['anotation'] as List<Anotation>,
     );
@@ -71,7 +66,7 @@ class Disciplinas {
 
   @override
   String toString() {
-    return 'Disciplinas(title: $title, initial: $initial, horas_dedicadas_por_semana: $horas_dedicadas_por_semana, expired: $expired, label: $label, anotation: $anotation)';
+    return 'Disciplinas(title: $title, initial: $initial, horas_dedicadas_por_semana: $horas_dedicadas_por_semana, label: $label, anotation: $anotation)';
   }
 
   @override
@@ -81,7 +76,6 @@ class Disciplinas {
     return other.title == title &&
         other.initial == initial &&
         other.horas_dedicadas_por_semana == horas_dedicadas_por_semana &&
-        other.expired == expired &&
         other.label == label &&
         other.anotation == anotation;
   }
@@ -91,7 +85,6 @@ class Disciplinas {
     return title.hashCode ^
         initial.hashCode ^
         horas_dedicadas_por_semana.hashCode ^
-        expired.hashCode ^
         label.hashCode ^
         anotation.hashCode;
   }
