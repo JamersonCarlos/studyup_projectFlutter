@@ -33,18 +33,22 @@ class ServiceAuthentication {
       UserCredential user = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       if (user != null) {
-        List data = await first_login(user.user!.uid);
-        if (data.isNotEmpty) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                  builder: (context) => HomeApp(user: user.user!.uid)),
-              (Route<dynamic> route) => false);
-        } else {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                  builder: (context) => FormTime(uid: user.user!.uid)),
-              (Route<dynamic> route) => false);
-        }
+        // List data = await first_login(user.user!.uid);
+        // if (data.isNotEmpty) {
+        //   Navigator.of(context).pushAndRemoveUntil(
+        //       MaterialPageRoute(
+        //           builder: (context) => HomeApp(user: user.user!.uid)),
+        //       (Route<dynamic> route) => false);
+        // } else {
+        //   Navigator.of(context).pushAndRemoveUntil(
+        //       MaterialPageRoute(
+        //           builder: (context) => FormTime(uid: user.user!.uid)),
+        //       (Route<dynamic> route) => false);
+        // }
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) => HomeApp(user: user.user!.uid)),
+            (Route<dynamic> route) => false);
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -71,7 +75,8 @@ class ServiceAuthentication {
         "username": username,
         "email": email,
         "disciplinas": [],
-        "horários_livres": []
+        "horários_livres": [],
+        "QTableIA": [],
       };
 
       //Add new user in collection users

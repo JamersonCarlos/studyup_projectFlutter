@@ -41,7 +41,6 @@ class _CalendarPageState extends State<CalendarPage> {
                 calendarFormat: _cubit.calendarFormat,
                 onFormatChanged: (format) => _cubit.changeCalendar(format),
                 onDaySelected: (selectedDay, focusedDay) {
-                  
                   print('dey selected ' + selectedDay.toIso8601String());
                 },
               );
