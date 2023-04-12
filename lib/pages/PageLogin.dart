@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/models/notifications.dart';
@@ -30,7 +31,8 @@ class _AutheticationPageState extends State<AutheticationPage> {
   final formKey = GlobalKey<FormState>();
   final email = TextEditingController();
   final senha = TextEditingController();
-  FirebaseFirestore db = FirebaseFirestore.instance;
+  final FirebaseFirestore db = FirebaseFirestore.instance;
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
   bool visibility_pass = false;
   final recorder = FlutterSoundRecorder();
@@ -45,6 +47,11 @@ class _AutheticationPageState extends State<AutheticationPage> {
 
     FirebaseAuth.instance.authStateChanges().listen((User? event) {
       if (event != null) {
+        firebaseMessaging.getToken().then((token) => db
+            .collection("users")
+            .doc(event.uid)
+            .set(
+                {"TokenMessaging": token.toString()}, SetOptions(merge: true)));
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
