@@ -27,6 +27,7 @@ class _ListPrioritiesState extends State<ListPriorities> {
           List<dynamic>? list = snapshot.data;
           return ReorderableListView.builder(
             onReorder: (oldIndex, newIndex) {
+              bool alterableList = false;
               setState(() {
                 if (oldIndex < newIndex) {
                   newIndex -= 1;
@@ -37,7 +38,13 @@ class _ListPrioritiesState extends State<ListPriorities> {
                     .collection("users")
                     .doc(widget.uid)
                     .set({"disciplinas": list}, SetOptions(merge: true));
+                alterableList = true;
               });
+              if (alterableList) {
+                print("A lista foi alterada com sucesso");
+              } else {
+                print('Erro! Ordem não alterada');
+              }
             },
             padding: const EdgeInsets.all(8),
             itemCount: count,

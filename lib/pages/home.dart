@@ -33,6 +33,7 @@ class _HomeAppState extends State<HomeApp> {
 
   TextEditingController name_subject = TextEditingController();
   TextEditingController time_subject = TextEditingController();
+  List<dynamic> listSubjects = [];
 
   PageController pageController = PageController(
     initialPage: 1,
@@ -163,6 +164,7 @@ class _HomeAppState extends State<HomeApp> {
   Future<List<dynamic>> getAllSubjects() async {
     DocumentSnapshot doc = await db.collection("users").doc(widget.user).get();
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    listSubjects = data["disciplinas"];
     return data["disciplinas"];
   }
 
@@ -212,6 +214,7 @@ class _HomeAppState extends State<HomeApp> {
                                   padding: const EdgeInsets.only(
                                       top: 8, left: 8, right: 8, bottom: 20),
                                   child: TextFormField(
+                                    maxLength: 2,
                                     cursorColor: Colors.white,
                                     controller: time_subject,
                                     keyboardType: TextInputType.number,
@@ -246,6 +249,8 @@ class _HomeAppState extends State<HomeApp> {
                                     ),
                                     ElevatedButton(
                                       onPressed: () {
+                                        int lengthListBack =
+                                            listSubjects.length;
                                         if (name_subject.text.isNotEmpty &&
                                             time_subject.text.isNotEmpty) {
                                           //define new subject using subject model
@@ -258,7 +263,8 @@ class _HomeAppState extends State<HomeApp> {
                                                           time_subject.text),
                                                   label: "",
                                                   anotation: []).toMap();
-
+                                          name_subject.clear();
+                                          time_selected.clear();
                                           //send data of firestore database
                                           setState(
                                             () {
@@ -273,8 +279,16 @@ class _HomeAppState extends State<HomeApp> {
                                                   )
                                                 },
                                               );
+                                              listSubjects.add(newSubject);
                                             },
                                           );
+                                          if (listSubjects.length ==
+                                              lengthListBack + 1) {
+                                            print(
+                                                "A disciplina foi adicionada com sucesso");
+                                          } else {
+                                            print("Disciplina não adicionada");
+                                          }
                                           Navigator.of(context).pop();
                                         }
                                       },
