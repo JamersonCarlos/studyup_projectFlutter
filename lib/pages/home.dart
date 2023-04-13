@@ -42,7 +42,6 @@ class _HomeAppState extends State<HomeApp> {
   void initState() {
     super.initState();
     permissionAudio();
-    print(widget.user);
     // checkNotification();
 
   }

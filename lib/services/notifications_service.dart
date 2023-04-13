@@ -47,8 +47,6 @@ class NotificationsService {
 
   Future<void> _onSelectNotification(String? payload) async { //a ideia e que va apar uma rota especifica
     if (payload != null && payload.isNotEmpty) {
-      print("payload:$payload");
-      print("usuario clickou na notificaçao");
       Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                   builder: (context) => const PomodoroPage()),
@@ -66,7 +64,7 @@ class NotificationsService {
         priority: Priority.max,
         enableVibration: true);
 
-    DateTime date = DateTime.now().add(const Duration(seconds: 4));
+    DateTime date = DateTime.now().add(const Duration(seconds: 3));
     localNotificationsPlugin.zonedSchedule(
         notification.id,
         notification.title,
