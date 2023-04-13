@@ -63,6 +63,7 @@ dependencies:
   audioplayers: ^1.0.1
   dio: ^5.1.1
   firebase_messaging: ^14.4.0
+  dio: ^5.1.1
 
   
 dev_dependencies:
