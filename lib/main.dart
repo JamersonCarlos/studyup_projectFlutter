@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       home: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => CalendarCubit()),
-          BlocProvider(create: (context) => NotificationsCubit()),
+          BlocProvider(create: (context) => NotificationsCubit(context)),
         ],
         child: const AutheticationPage(),
       ),
