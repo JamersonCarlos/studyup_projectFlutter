@@ -3,16 +3,20 @@ import '../models/notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tzData;
+import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/pomodoro.dart';
 
 
 class NotificationsService {
   late AndroidNotificationDetails androidNotification;
   final FlutterLocalNotificationsPlugin localNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  late final BuildContext context;
   
-  NotificationsService() {
+  NotificationsService(context) {
     localNotificationsPlugin.resolvePlatformSpecificImplementation<
     AndroidFlutterLocalNotificationsPlugin>()?.requestPermission();
     _setupNotifications();
+    this.context = context;
   } 
 
   _setupNotifications() async {
@@ -43,7 +47,12 @@ class NotificationsService {
 
   Future<void> _onSelectNotification(String? payload) async { //a ideia e que va apar uma rota especifica
     if (payload != null && payload!.isNotEmpty) {
+      print("payload:"+ payload);
       print("usuario clickou na notificaçao");
+      Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) => const PomodoroPage()),
+              (Route<dynamic> route) => false);
     }
   }
 

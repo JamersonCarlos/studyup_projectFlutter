@@ -343,18 +343,5 @@ class _HomeAppState extends State<HomeApp> {
     }
   }
 
-  checkNotification() async {
-    print('emitindo notificacao');
-    final notificationWelcome = ReceivedNotification(
-        id: 1,
-        title: 'Bem vindo ao Study UP',
-        body: 'Agende suas disciplinas agora',
-        payload: 'payload');
-
-    final managerNotification = context.read<NotificationsCubit>();
-    managerNotification.initialize();
-    managerNotification.notificationsService
-        .showNotfication(notificationWelcome);
-    await managerNotification.notificationsService.checkForNotifications();
-  }
+ 
 }
