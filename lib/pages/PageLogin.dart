@@ -40,7 +40,9 @@ class _AutheticationPageState extends State<AutheticationPage> {
   @override
   void initState() {
     super.initState();
-    Firebase.initializeApp().whenComplete(() {  
+    Firebase.initializeApp().whenComplete(() {
+      print("completed");
+      
     });
 
     FirebaseAuth.instance.authStateChanges().listen((User? event) {
