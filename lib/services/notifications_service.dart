@@ -46,13 +46,13 @@ class NotificationsService {
   }
 
   Future<void> _onSelectNotification(String? payload) async { //a ideia e que va apar uma rota especifica
-    if (payload != null && payload!.isNotEmpty) {
-      print("payload:"+ payload);
+    if (payload != null && payload.isNotEmpty) {
+      print("payload:$payload");
       print("usuario clickou na notificaçao");
       Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                   builder: (context) => const PomodoroPage()),
-              (Route<dynamic> route) => false);
+                  (Route<dynamic> route) => false);
     }
   }
 

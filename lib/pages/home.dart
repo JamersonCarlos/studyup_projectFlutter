@@ -42,7 +42,9 @@ class _HomeAppState extends State<HomeApp> {
   void initState() {
     super.initState();
     permissionAudio();
+    print(widget.user);
     // checkNotification();
+
   }
 
   Future permissionAudio() async {
@@ -142,7 +144,7 @@ class _HomeAppState extends State<HomeApp> {
           children: [
             BlocProvider(
               create: (context) => CalendarCubit(),
-              child: CalendarPage(),
+              child: const CalendarPage(),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
