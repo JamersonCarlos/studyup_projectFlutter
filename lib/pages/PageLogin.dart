@@ -40,9 +40,7 @@ class _AutheticationPageState extends State<AutheticationPage> {
   @override
   void initState() {
     super.initState();
-    Firebase.initializeApp().whenComplete(() {
-      print("completed");
-      
+    Firebase.initializeApp().whenComplete(() {  
     });
 
     FirebaseAuth.instance.authStateChanges().listen((User? event) {
@@ -57,6 +55,7 @@ class _AutheticationPageState extends State<AutheticationPage> {
             MaterialPageRoute(
                 builder: (context) => HomeApp(
                       user: event.uid,
+                      pagelocal: 1,
                     )),
             (route) => false);
       }

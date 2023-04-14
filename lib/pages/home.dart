@@ -2,8 +2,10 @@ import 'package:circle_nav_bar/circle_nav_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/cubits/metas/metas_cubit.dart';
 import 'package:flutter_application_1/models/disciplinas.dart';
 import 'package:flutter_application_1/pages/calendar/calendar_page.dart';
+import 'package:flutter_application_1/pages/pomodoro/pomodoro.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,8 +20,8 @@ import '../models/notifications.dart';
 import '../widgets/priorities_list.dart';
 
 class HomeApp extends StatefulWidget {
-  const HomeApp({super.key, required this.user});
-
+  HomeApp({super.key, required this.user,required this.pagelocal});
+  late int pagelocal;
   final String user;
 
   @override
@@ -44,7 +46,6 @@ class _HomeAppState extends State<HomeApp> {
     super.initState();
     permissionAudio();
     // checkNotification();
-
   }
 
   Future permissionAudio() async {
@@ -122,8 +123,9 @@ class _HomeAppState extends State<HomeApp> {
           onTap: (index) {
             setState(() {
               _selectedIndex = index;
+              widget.pagelocal = index;
             });
-            pageController.animateToPage(index,
+            pageController.animateToPage(widget.pagelocal,
                 duration: Duration(milliseconds: 400), curve: Curves.ease);
           },
           // tabCurve: ,
@@ -142,8 +144,15 @@ class _HomeAppState extends State<HomeApp> {
         body: PageView(
           controller: pageController,
           children: [
-            BlocProvider(
-              create: (context) => CalendarCubit(),
+            MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => CalendarCubit(),
+                ),
+                BlocProvider(
+                  create: (context) => MetasCubit(),
+                ),
+              ],
               child: const CalendarPage(),
             ),
             Column(
@@ -157,7 +166,10 @@ class _HomeAppState extends State<HomeApp> {
                 )),
               ],
             ),
-            Container(),
+            BlocProvider(
+              create: (context) => MetasCubit(),
+              child: const PomodoroPage(),
+            ),
           ],
         ));
   }
@@ -314,6 +326,4 @@ class _HomeAppState extends State<HomeApp> {
           }));
     }
   }
-
- 
 }

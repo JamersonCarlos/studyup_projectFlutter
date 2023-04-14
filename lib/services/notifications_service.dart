@@ -4,7 +4,9 @@ import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tzData;
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/pomodoro.dart';
+import 'package:flutter_application_1/pages/pomodoro/pomodoro.dart';
+
+import '../pages/home.dart';
 
 
 class NotificationsService {
@@ -49,7 +51,7 @@ class NotificationsService {
     if (payload != null && payload.isNotEmpty) {
       Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                  builder: (context) => const PomodoroPage()),
+                  builder: (context) => HomeApp(user: payload,pagelocal: 2,)),
                   (Route<dynamic> route) => false);
     }
   }
