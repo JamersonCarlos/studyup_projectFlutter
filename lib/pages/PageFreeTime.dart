@@ -252,7 +252,7 @@ class _FormTimeState extends State<FormTime> {
                     (value) {
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
-                              builder: (context) => HomeApp(user: widget.uid)),
+                              builder: (context) => HomeApp(user: widget.uid,pagelocal: 1,)),
                           (Route<dynamic> route) => false);
                     },
                   );

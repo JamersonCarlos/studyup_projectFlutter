@@ -64,6 +64,7 @@ dependencies:
   dio: ^5.1.1
   firebase_messaging: ^14.4.0
   dio: ^5.1.1
+  circular_countdown_timer: ^0.2.3
 
   
 dev_dependencies:

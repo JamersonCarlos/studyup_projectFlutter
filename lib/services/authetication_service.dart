@@ -47,7 +47,7 @@ class ServiceAuthentication {
         // }
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-                builder: (context) => HomeApp(user: user.user!.uid)),
+                builder: (context) => HomeApp(user: user.user!.uid,pagelocal: 1,)),
             (Route<dynamic> route) => false);
       }
     } on FirebaseAuthException catch (e) {

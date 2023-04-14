@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class EventWidget extends StatelessWidget {
-  const EventWidget({super.key, required this.index});
+  const EventWidget({super.key, required this.index, required this.meta});
   final int index;
+  final Map<String, dynamic> meta;
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +29,17 @@ class EventWidget extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    "Meta$index",
+                    meta['disciplina'],
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                   const SizedBox(height: 2),
                   Row(
-                    children: const [
-                      Icon(Icons.menu),
-                      SizedBox(width: 6),
-                      Icon(Icons.draw)
+                    children:[
+                      const Icon(Icons.menu),
+                      Text(meta['dataMeta'] + '-' + meta['horario_meta']),
+                      const SizedBox(width: 6),
+                      const Icon(Icons.draw)
                     ],
                   ),
                 ],
