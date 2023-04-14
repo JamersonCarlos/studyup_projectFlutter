@@ -55,6 +55,12 @@ class NotificationsService {
                   (Route<dynamic> route) => false);
     }
   }
+  navegator(String? payload){
+    Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) => HomeApp(user: payload!,pagelocal: 2,)),
+                  (Route<dynamic> route) => false);
+  } 
 
   showNotfication(ReceivedNotification notification) {
 

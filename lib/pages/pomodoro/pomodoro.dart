@@ -13,13 +13,6 @@ class PomodoroPage extends StatelessWidget {
     return Column(
       children: [
         TimerCircle(cubit: cubit),
-        Center(
-            child: ElevatedButton(
-          onPressed: () {
-            // ApiService().sendNotification('yqEenvOBLDPwiX1bwRY8KpfMMmQ2');
-          },
-          child: const Text('Start Timer'),
-        )),
       ],
     );
   }
