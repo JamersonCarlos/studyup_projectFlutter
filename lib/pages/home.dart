@@ -20,7 +20,7 @@ import '../models/notifications.dart';
 import '../widgets/priorities_list.dart';
 
 class HomeApp extends StatefulWidget {
-  HomeApp({super.key, required this.user,required this.pagelocal});
+  HomeApp({super.key, required this.user, required this.pagelocal});
   late int pagelocal;
   final String user;
 
@@ -29,7 +29,7 @@ class HomeApp extends StatefulWidget {
 }
 
 class _HomeAppState extends State<HomeApp> {
-  int _selectedIndex = 1;
+
   FirebaseFirestore db = FirebaseFirestore.instance;
   final _formKey = GlobalKey<FormState>();
 
@@ -37,10 +37,6 @@ class _HomeAppState extends State<HomeApp> {
   TextEditingController time_subject = TextEditingController();
   List<dynamic> listSubjects = [];
 
-  PageController pageController = PageController(
-    initialPage: 1,
-    keepPage: true,
-  );
   @override
   void initState() {
     super.initState();
@@ -57,6 +53,10 @@ class _HomeAppState extends State<HomeApp> {
 
   @override
   Widget build(BuildContext context) {
+    PageController pageController = PageController(
+      initialPage: widget.pagelocal,
+      keepPage: true,
+    );
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(65),
@@ -95,7 +95,7 @@ class _HomeAppState extends State<HomeApp> {
             GestureDetector(
               child: const Icon(FontAwesomeIcons.add, color: Color(0xFF03045E)),
               onTap: () {
-                addSubjectDatabase(_selectedIndex);
+                addSubjectDatabase(widget.pagelocal);
               },
             ),
             const Icon(FontAwesomeIcons.clipboardList,
@@ -120,11 +120,11 @@ class _HomeAppState extends State<HomeApp> {
           circleColor: Colors.white,
           height: 60,
           circleWidth: 60,
-          activeIndex: _selectedIndex,
+          activeIndex: widget.pagelocal,
           onTap: (index) {
             setState(() {
-              _selectedIndex = index;
               widget.pagelocal = index;
+  
             });
             pageController.animateToPage(widget.pagelocal,
                 duration: Duration(milliseconds: 400), curve: Curves.ease);
@@ -183,7 +183,7 @@ class _HomeAppState extends State<HomeApp> {
   }
 
   void addSubjectDatabase(int index) {
-    if (_selectedIndex == 1) {
+    if (widget.pagelocal == 1) {
       showDialog(
           context: context,
           builder: ((BuildContext context) {

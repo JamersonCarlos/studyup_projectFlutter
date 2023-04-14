@@ -29,11 +29,13 @@ class _CalendarPageState extends State<CalendarPage> {
                 locale: 'pt-br',
                 firstDay: DateTime.utc(2010, 10, 16),
                 lastDay: DateTime.utc(2030, 3, 14),
-                focusedDay: DateTime.now(),
-                calendarStyle: const CalendarStyle(
-                  todayDecoration: BoxDecoration(
+                focusedDay: _cubit.focusedDay,
+                currentDay: _cubit.focusedDay,
+                calendarStyle: const  CalendarStyle(
+                  todayDecoration:  BoxDecoration(
                       color: Colors.indigo,
-                      borderRadius: BorderRadius.all(Radius.circular(30))),
+                      // borderRadius:  BorderRadius.all(Radius.circular(30)),
+                      ),
                 ),
                 eventLoader: (day) {
                   if (day.weekday == DateTime.monday) {
@@ -45,7 +47,8 @@ class _CalendarPageState extends State<CalendarPage> {
                 calendarFormat: _cubit.calendarFormat,
                 onFormatChanged: (format) => _cubit.changeCalendar(format),
                 onDaySelected: (selectedDay, focusedDay) {
-                  _cubitMetas.FilterMetasByDay(selectedDay);
+                  _cubit.emitFocusedDay(focusedDay);
+                  _cubitMetas.filterMetasByDay(selectedDay);
                 },
               );
             },
@@ -59,22 +62,22 @@ class _CalendarPageState extends State<CalendarPage> {
               if (state is MetasLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
-              if(state is MetasLoaded){
+              if (state is MetasLoaded) {
                 return Expanded(
                   child: ListView.separated(
                     padding: const EdgeInsets.only(bottom: 150),
                     itemCount: state.metas.length,
-                    separatorBuilder: (context, index) =>
-                        const Padding(padding: EdgeInsets.symmetric(vertical: 6)),
+                    separatorBuilder: (context, index) => const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 6)),
                     itemBuilder: (context, index) {
-                      return EventWidget(index: index, meta:state.metas[index]);
+                      return EventWidget(
+                          index: index, meta: state.metas[index]);
                     },
                   ),
                 );
-              }else{
+              } else {
                 return const Center(child: Text('Erro ao carregar as metas'));
               }
-            
             },
           )
         ],

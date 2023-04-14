@@ -15,11 +15,12 @@ class FirebaseService {
     return subjectdata['metas'] as List<dynamic>;
   }
 
-  Future<void> updateEnvarimentIa(String uid) async {
+  Future<void> updateEnvarimentIa(String uid, double reforco) async {
     // await db.collection("users").doc(uid).collection("QTable").add({
     //   "meta": meta,
     //   "status": false,
     // });
     print('updateEnvarimentIa');
+    print('valor de reforco: $reforco');
   }
 }

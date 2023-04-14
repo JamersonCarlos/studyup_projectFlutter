@@ -14,7 +14,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
 
   NotificationsCubit(context) : super(NotificationsInitial()) {
     this.context = context;
-    this.notificationsService = NotificationsService(this.context); 
+    this.notificationsService = NotificationsService(this.context);
   }
 
   Future<void> initialize() async {
@@ -51,6 +51,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   }
 
   _goToRoute(message) {
+    notificationsService.navegator(message.data['route'] ?? '');
     print('rotas excutadas');
   }
 }
