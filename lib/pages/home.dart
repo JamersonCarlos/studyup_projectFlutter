@@ -39,6 +39,7 @@ class _HomeAppState extends State<HomeApp> {
     initialPage: 1,
     keepPage: true,
   );
+
   @override
   void initState() {
     super.initState();
