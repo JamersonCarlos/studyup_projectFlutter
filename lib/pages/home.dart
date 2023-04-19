@@ -167,10 +167,7 @@ class _HomeAppState extends State<HomeApp> {
                 )),
               ],
             ),
-            BlocProvider(
-              create: (context) => MetasCubit(),
-              child: const PomodoroPage(),
-            ),
+            Container(),
           ],
         ));
   }

@@ -31,23 +31,33 @@ class MetasCubit extends Cubit<MetasState> {
     emit(MetasLoading());
     filterMetasForDate(day);
     emit(MetasLoaded(metas: filterMetasForDate(day)));
-
   }
 
   filterMetasForDate(DateTime day) {
     focusedDay = day;
     List listForFilter = [];
     for (int i = 0; i < metasByUser.length; i++) {
-      if (day.day ==
-          _transformData(metasByUser[i] as Map<String, dynamic>).day) {
+      var textodata = _transformData(metasByUser[i] as Map<String, dynamic>);
+
+      if (day.day == textodata.day &&
+          day.month == textodata.month &&
+          day.year == textodata.year) {
+
         listForFilter.add(metasByUser[i]);
+        
       }
     }
+    listForFilter.sort((a, b) {
+          var dateA =_transformData(a as Map<String, dynamic>);
+          var dateB =_transformData(b as Map<String, dynamic>);
+          return dateA.compareTo(dateB);
+        });
     return listForFilter;
   }
 
+
   void updateEnvarimentIa(String uid, double reforco) async {
-    await service.updateEnvarimentIa(uid,reforco);
+    await service.updateEnvarimentIa(uid, reforco);
   }
 
   DateTime _transformData(Map<String, dynamic> meta) {

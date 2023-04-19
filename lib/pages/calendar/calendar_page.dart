@@ -45,6 +45,9 @@ class _CalendarPageState extends State<CalendarPage> {
                   return [];
                 },
                 calendarFormat: _cubit.calendarFormat,
+                headerStyle: const HeaderStyle(
+                  formatButtonVisible: false,
+                ),
                 onFormatChanged: (format) => _cubit.changeCalendar(format),
                 onDaySelected: (selectedDay, focusedDay) {
                   _cubit.emitFocusedDay(focusedDay);

@@ -5,15 +5,19 @@ import 'package:flutter_application_1/services/api_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PomodoroPage extends StatelessWidget {
-  const PomodoroPage({super.key});
+  const PomodoroPage({super.key, required this.disciplina});
+  final String disciplina;
 
   @override
   Widget build(BuildContext context) {
     final MetasCubit cubit = context.read<MetasCubit>();
-    return Column(
-      children: [
-        TimerCircle(cubit: cubit),
-      ],
+    return Scaffold(
+      appBar: AppBar(title: Text(disciplina),),
+      body: Column(
+        children: [
+          TimerCircle(cubit: cubit),
+        ],
+      ),
     );
   }
 }
