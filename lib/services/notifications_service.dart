@@ -3,16 +3,22 @@ import '../models/notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tzData;
+import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/pomodoro/pomodoro.dart';
+
+import '../pages/home.dart';
 
 
 class NotificationsService {
   late AndroidNotificationDetails androidNotification;
   final FlutterLocalNotificationsPlugin localNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  late final BuildContext context;
   
-  NotificationsService() {
+  NotificationsService(context) {
     localNotificationsPlugin.resolvePlatformSpecificImplementation<
     AndroidFlutterLocalNotificationsPlugin>()?.requestPermission();
     _setupNotifications();
+    this.context = context;
   } 
 
   _setupNotifications() async {
@@ -42,10 +48,19 @@ class NotificationsService {
   }
 
   Future<void> _onSelectNotification(String? payload) async { //a ideia e que va apar uma rota especifica
-    if (payload != null && payload!.isNotEmpty) {
-      print("usuario clickou na notificaçao");
+    if (payload != null && payload.isNotEmpty) {
+      Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) => HomeApp(user: payload,pagelocal: 2,)),
+                  (Route<dynamic> route) => false);
     }
   }
+  navegator(String? payload){
+    Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) => HomeApp(user: payload!,pagelocal: 2,)),
+                  (Route<dynamic> route) => false);
+  } 
 
   showNotfication(ReceivedNotification notification) {
 
@@ -57,7 +72,7 @@ class NotificationsService {
         priority: Priority.max,
         enableVibration: true);
 
-    DateTime date = DateTime.now().add(const Duration(seconds: 4));
+    DateTime date = DateTime.now().add(const Duration(seconds: 3));
     localNotificationsPlugin.zonedSchedule(
         notification.id,
         notification.title,

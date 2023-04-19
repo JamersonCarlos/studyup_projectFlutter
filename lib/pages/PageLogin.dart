@@ -40,9 +40,7 @@ class _AutheticationPageState extends State<AutheticationPage> {
   @override
   void initState() {
     super.initState();
-    Firebase.initializeApp().whenComplete(() {
-      print("completed");
-      checkNotification();
+    Firebase.initializeApp().whenComplete(() {  
     });
 
     FirebaseAuth.instance.authStateChanges().listen((User? event) {
@@ -57,13 +55,14 @@ class _AutheticationPageState extends State<AutheticationPage> {
             MaterialPageRoute(
                 builder: (context) => HomeApp(
                       user: event.uid,
+                      pagelocal: 1,
                     )),
             (route) => false);
       }
     });
   }
 
-  checkNotification() async {
+  checkNotification(BuildContext context) async {
     print('emitindo notificacao');
     final notificationWelcome = ReceivedNotification(
         id: 1,
@@ -82,6 +81,7 @@ class _AutheticationPageState extends State<AutheticationPage> {
   Widget build(BuildContext context) {
     final ServiceAuthentication service = ServiceAuthentication();
     final CalendarCubit _cubit = context.read<CalendarCubit>();
+    checkNotification(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xFFF5F5F5),
