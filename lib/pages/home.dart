@@ -6,6 +6,7 @@ import 'package:flutter_application_1/cubits/metas/metas_cubit.dart';
 import 'package:flutter_application_1/models/disciplinas.dart';
 import 'package:flutter_application_1/pages/calendar/calendar_page.dart';
 import 'package:flutter_application_1/pages/pomodoro/pomodoro.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,9 +19,11 @@ import '../cubits/calendar/calendar_cubit.dart';
 import '../cubits/nofications/notifications_cubit.dart';
 import '../models/notifications.dart';
 import '../widgets/priorities_list.dart';
+import 'PageMain.dart';
 
 class HomeApp extends StatefulWidget {
   HomeApp({super.key, required this.user, required this.pagelocal});
+
   late int pagelocal;
   final String user;
 
@@ -29,13 +32,17 @@ class HomeApp extends StatefulWidget {
 }
 
 class _HomeAppState extends State<HomeApp> {
-
   FirebaseFirestore db = FirebaseFirestore.instance;
-  final _formKey = GlobalKey<FormState>();
-
-  TextEditingController name_subject = TextEditingController();
-  TextEditingController time_subject = TextEditingController();
   List<dynamic> listSubjects = [];
+  TextEditingController name_subject = TextEditingController();
+
+  var time_selected;
+  TextEditingController time_subject = TextEditingController();
+  PageController pageController = PageController(
+    initialPage: 0,
+    keepPage: true,
+  );
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -167,7 +174,10 @@ class _HomeAppState extends State<HomeApp> {
                 )),
               ],
             ),
-            Container(),
+            BlocProvider(
+              create: (context) => MetasCubit(),
+              child: const PomodoroPage(),
+            ),
           ],
         ));
   }
@@ -180,7 +190,7 @@ class _HomeAppState extends State<HomeApp> {
   }
 
   void addSubjectDatabase(int index) {
-    if (widget.pagelocal == 1) {
+    if (widget.pagelocal == 2) {
       showDialog(
           context: context,
           builder: ((BuildContext context) {
@@ -338,5 +348,134 @@ class _HomeAppState extends State<HomeApp> {
     managerNotification.notificationsService
         .showNotfication(notificationWelcome);
     await managerNotification.notificationsService.checkForNotifications();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(65),
+        child: AppBar(
+          elevation: 10,
+          backgroundColor: const Color(0xFF133262),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(24),
+              bottomRight: Radius.circular(24),
+            ),
+          ),
+          leading: const Icon(
+            Icons.account_circle_rounded,
+            color: Colors.white,
+            size: 50,
+          ),
+          automaticallyImplyLeading: false,
+          leadingWidth: 100,
+          title: const Text(
+            "Jamerson Carlos",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: SvgPicture.asset('assets/img/icon_config.svg'),
+            ),
+          ],
+        ),
+      ),
+      // bottomNavigationBar: CircleNavBar(
+      //   activeIcons: [
+      //     const Icon(
+      //       Icons.home,
+      //       color: Color(0xFF03045E),
+      //     ),
+      //     const Icon(FontAwesomeIcons.calendarDays, color: Color(0xFF03045E)),
+      //     GestureDetector(
+      //       child: const Icon(FontAwesomeIcons.add, color: Color(0xFF03045E)),
+      //       onTap: () {
+      //         addSubjectDatabase(widget.pagelocal);
+      //       },
+      //     ),
+      //     const Icon(FontAwesomeIcons.clipboardList,
+      //         color: Color(0xFF03045E)),
+      //   ],
+      //   inactiveIcons: const [
+      //     Icon(
+      //       Icons.home,
+      //       color: Colors.white,
+      //     ),
+      //     Icon(
+      //       FontAwesomeIcons.calendarDays,
+      //       color: Colors.white,
+      //     ),
+      //     Icon(
+      //       Icons.bookmark,
+      //       color: Colors.white,
+      //       size: 25,
+      //     ),
+      //     Icon(
+      //       FontAwesomeIcons.clipboardUser,
+      //       color: Colors.white,
+      //     ),
+      //   ],
+      //   color: Color(0xFF133262),
+      //   circleColor: Colors.white,
+      //   height: 60,
+      //   circleWidth: 60,
+      //   activeIndex: widget.pagelocal,
+      //   onTap: (index) {
+      //     setState(() {
+      //       widget.pagelocal = index;
+      //     });
+      //     pageController.animateToPage(widget.pagelocal,
+      //         duration: Duration(milliseconds: 400), curve: Curves.ease);
+      //   },
+      //   // tabCurve: ,
+      //   padding: const EdgeInsets.only(left: 8, right: 8, bottom: 10),
+      //   cornerRadius: const BorderRadius.only(
+      //     topLeft: Radius.circular(24),
+      //     topRight: Radius.circular(24),
+      //     bottomRight: Radius.circular(24),
+      //     bottomLeft: Radius.circular(24),
+      //   ),
+      //   shadowColor: Color(0xFF03045E),
+      //   circleShadowColor: Color(0xFF03045E),
+      //   elevation: 10,
+      // ),
+      backgroundColor: Colors.white,
+      body: PageView(
+        controller: pageController,
+        children: [
+          menuMain(
+            uid: widget.user,
+          ),
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => CalendarCubit(),
+              ),
+              BlocProvider(
+                create: (context) => MetasCubit(),
+              ),
+            ],
+            child: const CalendarPage(),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                  child: ListPriorities(
+                uid: widget.user,
+              )),
+            ],
+          ),
+          BlocProvider(
+            create: (context) => MetasCubit(),
+            child: const PomodoroPage(),
+          ),
+        ],
+      ),
+    );
   }
 }
