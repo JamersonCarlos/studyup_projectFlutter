@@ -31,7 +31,6 @@ class MetasCubit extends Cubit<MetasState> {
     emit(MetasLoading());
     filterMetasForDate(day);
     emit(MetasLoaded(metas: filterMetasForDate(day)));
-
   }
 
   filterMetasForDate(DateTime day) {
@@ -47,12 +46,12 @@ class MetasCubit extends Cubit<MetasState> {
   }
 
   void updateEnvarimentIa(String uid, double reforco) async {
-    await service.updateEnvarimentIa(uid,reforco);
+    await service.updateEnvarimentIa(uid, reforco);
   }
 
   DateTime _transformData(Map<String, dynamic> meta) {
     String dateString =
-        "${meta['dataMeta'] + "T" + meta['horario_meta']}0:00.000Z";
+        "${meta['dataMeta'] + "T" + meta['horario_meta']}:00.000Z";
     try {
       DateTime date = DateTime.parse(dateString);
       return date;
