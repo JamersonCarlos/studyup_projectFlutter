@@ -10,10 +10,14 @@ class PomodoroPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MetasCubit cubit = context.read<MetasCubit>();
-    return Column(
-      children: [
-        TimerCircle(cubit: cubit),
-      ],
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(),
+      body: Column(
+        children: [
+          TimerCircle(cubit: cubit),
+        ],
+      ),
     );
   }
 }
