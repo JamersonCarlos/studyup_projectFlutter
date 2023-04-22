@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/cubits/calendar/calendar_cubit.dart';
 import 'package:flutter_application_1/pages/calendar/widget/event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../cubits/metas/metas_cubit.dart';
@@ -20,6 +21,14 @@ class _CalendarPageState extends State<CalendarPage> {
     late MetasCubit _cubitMetas = context.read<MetasCubit>();
     _cubitMetas.getMetasByUidUser('yqEenvOBLDPwiX1bwRY8KpfMMmQ2');
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Calendário",
+          style: GoogleFonts.balooPaaji2(
+            color: Colors.black,
+          ),
+        ),
+      ),
       body: Column(
         children: [
           BlocConsumer<CalendarCubit, CalendarState>(
@@ -31,11 +40,11 @@ class _CalendarPageState extends State<CalendarPage> {
                 lastDay: DateTime.utc(2030, 3, 14),
                 focusedDay: _cubit.focusedDay,
                 currentDay: _cubit.focusedDay,
-                calendarStyle: const  CalendarStyle(
-                  todayDecoration:  BoxDecoration(
-                      color: Colors.indigo,
-                      // borderRadius:  BorderRadius.all(Radius.circular(30)),
-                      ),
+                calendarStyle: const CalendarStyle(
+                  todayDecoration: BoxDecoration(
+                    color: Colors.indigo,
+                    // borderRadius:  BorderRadius.all(Radius.circular(30)),
+                  ),
                 ),
                 eventLoader: (day) {
                   if (day.weekday == DateTime.monday) {

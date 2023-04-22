@@ -64,6 +64,7 @@ dependencies:
   dio: ^5.1.1
   firebase_messaging: ^14.4.0
   circular_countdown_timer: ^0.2.3
+  graphic: ^2.1.0
 
   
 dev_dependencies:
@@ -101,6 +102,11 @@ flutter:
       - assets/img/bottom_background1.svg
       - assets/img/icon_config.svg
       - assets/img/free_time.png
+      - assets/img/graphicIcon.svg
+      - assets/img/initial1.svg
+      - assets/img/initial2.svg
+      - assets/img/iconMain.svg
+      - assets/img/iconMain.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

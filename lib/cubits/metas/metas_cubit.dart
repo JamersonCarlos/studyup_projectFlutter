@@ -62,7 +62,7 @@ class MetasCubit extends Cubit<MetasState> {
 
   DateTime _transformData(Map<String, dynamic> meta) {
     String dateString =
-        "${meta['dataMeta'] + "T" + meta['horario_meta']}0:00.000Z";
+        "${meta['dataMeta'] + "T" + meta['horario_meta']}:00.000Z";
     try {
       DateTime date = DateTime.parse(dateString);
       return date;
