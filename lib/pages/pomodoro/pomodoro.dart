@@ -12,12 +12,13 @@ class PomodoroPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final MetasCubit cubit = context.read<MetasCubit>();
     return Scaffold(
-      appBar: AppBar(title: Text(disciplina),),
+      backgroundColor: Colors.white,
+      appBar: AppBar(),
       body: Column(
         children: [
           TimerCircle(cubit: cubit),
         ],
       ),
-    );
+  
   }
 }
