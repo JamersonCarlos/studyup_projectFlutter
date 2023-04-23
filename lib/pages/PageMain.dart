@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/PageListAnotations.dart';
 import 'package:flutter_application_1/pages/PageResults.dart';
 import 'package:flutter_application_1/pages/calendar/calendar_page.dart';
 import 'package:flutter_application_1/pages/pomodoro/pomodoro.dart';
@@ -26,6 +27,12 @@ class _menuMainState extends State<menuMain> {
   List<dynamic> listSubjects = [];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
@@ -46,9 +53,19 @@ class _menuMainState extends State<menuMain> {
           ),
           automaticallyImplyLeading: false,
           leadingWidth: 100,
-          title: const Text(
-            "Jamerson Carlos",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          title: FutureBuilder(
+            future: getNameUser(),
+            builder: (context, AsyncSnapshot<String> snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return Text(
+                  toUpperCaseFirst(snapshot.data!),
+                  style: const TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                );
+              } else {
+                return Container();
+              }
+            },
           ),
           actions: [
             Padding(
@@ -128,7 +145,9 @@ class _menuMainState extends State<menuMain> {
                                     create: (context) => MetasCubit(),
                                   ),
                                 ],
-                                child: const CalendarPage(),
+                                child: CalendarPage(
+                                  uid: widget.uid,
+                                ),
                               );
                             },
                           ));
@@ -143,14 +162,25 @@ class _menuMainState extends State<menuMain> {
                               Icons.calendar_month_outlined, "Calendário"),
                         ),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: primaryColor),
-                        width: 125,
-                        height: 125,
-                        child:
-                            iconMenu(Icons.sticky_note_2_outlined, "Anotações"),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) {
+                              return ListAnotations(
+                                uid: widget.uid,
+                              );
+                            },
+                          ));
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: primaryColor),
+                          width: 125,
+                          height: 125,
+                          child: iconMenu(
+                              Icons.sticky_note_2_outlined, "Anotações"),
+                        ),
                       ),
                     ],
                   ),
@@ -159,22 +189,46 @@ class _menuMainState extends State<menuMain> {
             ),
           ),
           GestureDetector(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) => CalendarCubit(),
+            onTap: () async {
+              List<dynamic> list = await getAllSubjects();
+              if (list.isNotEmpty) {
+                // ignore: use_build_context_synchronously
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return MultiBlocProvider(
+                        providers: [
+                          BlocProvider(
+                            create: (context) => CalendarCubit(),
+                          ),
+                          BlocProvider(
+                            create: (context) => MetasCubit(),
+                          ),
+                        ],
+                        child: PomodoroPage(
+                          uid: widget.uid,
+                          nameSubject: '',
+                          listSubject: list,
+                        ),
+                      );
+                    },
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Center(
+                      child: Text(
+                        "Nenhuma disciplina cadastrada!",
+                        style: GoogleFonts.lexendDeca(),
                       ),
-                      BlocProvider(
-                        create: (context) => MetasCubit(),
-                      ),
-                    ],
-                    child: const PomodoroPage(),
-                  );
-                },
-              ));
+                    ),
+                    duration: const Duration(seconds: 3),
+                    backgroundColor: const Color(0xFFA973C5),
+                  ),
+                );
+              }
             },
             child: Container(
               height: 150,
@@ -204,6 +258,25 @@ class _menuMainState extends State<menuMain> {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     listSubjects = data["disciplinas"];
     return data["disciplinas"];
+  }
+
+  Future<String> getNameUser() async {
+    DocumentSnapshot doc = await db.collection("users").doc(widget.uid).get();
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    return data["username"];
+  }
+
+  String toUpperCaseFirst(String palavra) {
+    List<dynamic> caracteres = palavra.split("");
+    String result = "";
+    for (var i = 0; i < caracteres.length; i++) {
+      if (i == 0) {
+        result = result + caracteres[i].toString().toUpperCase();
+      } else {
+        result = result + caracteres[i].toString();
+      }
+    }
+    return result;
   }
 }
 

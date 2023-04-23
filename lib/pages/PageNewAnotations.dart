@@ -1,3 +1,4 @@
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -87,31 +88,10 @@ class _AnotationsState extends State<Anotations> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 10,
-        backgroundColor: const Color(0xFF03045E),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(24),
-            bottomRight: Radius.circular(24),
-          ),
-        ),
-        leading: const Icon(
-          Icons.bookmark_added_outlined,
-          color: Colors.white,
-          size: 30,
-        ),
-        automaticallyImplyLeading: false,
-        leadingWidth: 100,
-        title: Text(
-          widget.title,
-          style:
-              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-      ),
+      appBar: AppBar(),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(left: 40, right: 40),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,22 +109,14 @@ class _AnotationsState extends State<Anotations> {
                         fontWeight: FontWeight.bold,
                         fontSize: 18),
                     labelText: "Titulo da anotação",
-                    enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Colors.blueAccent, width: 2),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 3),
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Colors.blueAccent, width: 2),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20),
-                      ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 3),
                     ),
-                    border: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Colors.blueAccent, width: 2),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    border: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 3),
                     ),
                   ),
                 ),
@@ -154,9 +126,9 @@ class _AnotationsState extends State<Anotations> {
               ),
               Container(
                 height: 200,
-                decoration: BoxDecoration(
-                    color: Colors.blueGrey.shade100,
-                    borderRadius: const BorderRadius.all(Radius.circular(10))),
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
                 child: TextField(
                   expands: true,
                   maxLines: null,
@@ -168,18 +140,15 @@ class _AnotationsState extends State<Anotations> {
                         fontWeight: FontWeight.bold,
                         fontSize: 18),
                     enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Colors.blueAccent, width: 2),
+                      borderSide: BorderSide(color: Colors.black, width: 1),
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Colors.blueAccent, width: 2),
+                      borderSide: BorderSide(color: Colors.black, width: 1),
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
                     border: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Colors.blueAccent, width: 2),
+                      borderSide: BorderSide(color: Colors.black, width: 1),
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
                   ),
@@ -190,10 +159,10 @@ class _AnotationsState extends State<Anotations> {
               ),
               Text(
                 "Links",
-                style: GoogleFonts.roboto(
-                    color: Colors.blueAccent,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
+                style: GoogleFonts.lexendDeca(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
               ),
               LinkList(
                   setFloatingButton: setFloatingButtonActive,
@@ -202,10 +171,10 @@ class _AnotationsState extends State<Anotations> {
               selectImages.isNotEmpty
                   ? Text(
                       "Imagens",
-                      style: GoogleFonts.roboto(
-                          color: Colors.blueAccent,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                      style: GoogleFonts.lexendDeca(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
                     )
                   : Container(),
               Padding(
@@ -239,10 +208,10 @@ class _AnotationsState extends State<Anotations> {
               ),
               Text(
                 "Audios",
-                style: GoogleFonts.roboto(
-                    color: Colors.blueAccent,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
+                style: GoogleFonts.lexendDeca(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
               ),
               ListView.builder(
                 shrinkWrap: true,
@@ -312,8 +281,8 @@ class _AnotationsState extends State<Anotations> {
                 SpeedDialChild(
                     elevation: 0,
                     backgroundColor: Colors.amberAccent,
-                    shape: StadiumBorder(),
-                    child: Icon(Icons.camera_alt_outlined),
+                    shape: const StadiumBorder(),
+                    child: const Icon(Icons.camera_alt_outlined),
                     onTap: () async {
                       final XFile? imageTemp = await imagePicker.pickImage(
                           source: ImageSource.camera);
