@@ -8,8 +8,9 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../cubits/metas/metas_cubit.dart';
 
 class CalendarPage extends StatefulWidget {
-  const CalendarPage({super.key});
+  CalendarPage({super.key, required this.uid});
 
+  String uid;
   @override
   State<CalendarPage> createState() => _CalendarPageState();
 }
@@ -19,7 +20,7 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     late CalendarCubit _cubit = context.read<CalendarCubit>();
     late MetasCubit _cubitMetas = context.read<MetasCubit>();
-    _cubitMetas.getMetasByUidUser('yqEenvOBLDPwiX1bwRY8KpfMMmQ2');
+    _cubitMetas.getMetasByUidUser(widget.uid);
     return Scaffold(
       appBar: AppBar(
         title: Text(

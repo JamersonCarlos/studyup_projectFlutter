@@ -57,9 +57,10 @@ class _recorderAudioState extends State<recorderAudio> {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.max,
         children: [
           const Padding(
-            padding: EdgeInsets.only(left: 10, right: 100),
+            padding: EdgeInsets.only(left: 10, right: 50),
             child: Text(
               "Grave Audio",
               style: TextStyle(color: Colors.white),
@@ -88,7 +89,6 @@ class _recorderAudioState extends State<recorderAudio> {
             },
             stream: recorder.onProgress,
           ),
-          const SizedBox(width: 20),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white, shape: CircleBorder()),

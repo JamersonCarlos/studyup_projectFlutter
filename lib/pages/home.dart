@@ -458,7 +458,7 @@ class _HomeAppState extends State<HomeApp> {
                 create: (context) => MetasCubit(),
               ),
             ],
-            child: const CalendarPage(),
+            child: CalendarPage(uid: widget.user),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -472,7 +472,11 @@ class _HomeAppState extends State<HomeApp> {
           ),
           BlocProvider(
             create: (context) => MetasCubit(),
-            child: const PomodoroPage(),
+            child: PomodoroPage(
+              uid: widget.user,
+              nameSubject: "",
+              listSubject: [],
+            ),
           ),
         ],
       ),
