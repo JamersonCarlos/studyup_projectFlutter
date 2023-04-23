@@ -65,6 +65,10 @@ dependencies:
   firebase_messaging: ^14.4.0
   circular_countdown_timer: ^0.2.3
   graphic: ^2.1.0
+  timer_count_down: ^2.2.0
+  flutter_timer_countdown: ^1.0.5
+  neon_circular_timer: ^0.0.7
+  dropdown_button2: ^2.1.0
 
   
 dev_dependencies:
@@ -105,7 +109,6 @@ flutter:
       - assets/img/graphicIcon.svg
       - assets/img/initial1.svg
       - assets/img/initial2.svg
-      - assets/img/iconMain.svg
       - assets/img/iconMain.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
