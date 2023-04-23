@@ -78,6 +78,7 @@ class ServiceAuthentication {
         "horários_livres": [],
         "QTableIA": [],
         "metas": [],
+        "anotations": [],
       };
 
       //Add new user in collection users

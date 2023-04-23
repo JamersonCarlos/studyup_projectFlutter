@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../models/disciplinas.dart';
-import '../pages/PageAnotations.dart';
+import '../pages/PageNewAnotations.dart';
 
 class ListPriorities extends StatefulWidget {
   const ListPriorities({super.key, required this.uid});
@@ -53,7 +53,7 @@ class _ListPrioritiesState extends State<ListPriorities> {
           ),
           Expanded(
             child: FutureBuilder(
-              future: subjects,
+              future: getAllSubjects(),
               builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   int count = snapshot.data!.length;
@@ -88,12 +88,22 @@ class _ListPrioritiesState extends State<ListPriorities> {
                             itemCount: count,
                             itemBuilder: (context, index) {
                               return Dismissible(
-                                background: Container(
-                                  color: Colors.red,
-                                  height: 50,
+                                background: Padding(
+                                  padding: const EdgeInsets.only(bottom: 5),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(24),
+                                    ),
+                                    child: const Align(
+                                      alignment: Alignment(-0.9, 0),
+                                      child: Icon(Icons.delete,
+                                          color: Colors.white),
+                                    ),
+                                  ),
                                 ),
-                                direction: DismissDirection.endToStart,
-                                key: Key(list![index]),
+                                direction: DismissDirection.startToEnd,
+                                key: Key(list![index]["title"]),
                                 onDismissed: (direction) {
                                   setState(() {
                                     list.removeAt(index);
@@ -104,7 +114,7 @@ class _ListPrioritiesState extends State<ListPriorities> {
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.only(bottom: 5),
-                                  key: ValueKey(list![index]),
+                                  key: ValueKey(list[index]),
                                   child: GestureDetector(
                                     onTap: () {
                                       Navigator.push(
