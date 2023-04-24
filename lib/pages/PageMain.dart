@@ -11,6 +11,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../cubits/calendar/calendar_cubit.dart';
 import '../cubits/metas/metas_cubit.dart';
+import '../cubits/nofications/notifications_cubit.dart';
+import '../models/notifications.dart';
 
 class menuMain extends StatefulWidget {
   menuMain({super.key, required this.uid});
@@ -34,6 +36,7 @@ class _menuMainState extends State<menuMain> {
 
   @override
   Widget build(BuildContext context) {
+    checkNotification(context);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(65),
@@ -207,9 +210,8 @@ class _menuMainState extends State<menuMain> {
                           ),
                         ],
                         child: PomodoroPage(
-                          uid: widget.uid,
                           nameSubject: '',
-                          listSubject: list,
+                    
                         ),
                       );
                     },
@@ -308,3 +310,18 @@ Widget iconMenu(IconData value, String text) {
     ),
   );
 }
+
+checkNotification(BuildContext context) async {
+    final notificationWelcome = ReceivedNotification(
+        id: 1,
+        title: 'Bem vindo ao Study UP',
+        body: 'Agende suas disciplinas agora',
+        payload: 'payload');
+
+    final managerNotification = context.read<NotificationsCubit>();
+    managerNotification.initialize();
+    managerNotification.notificationsService
+        .showNotfication(notificationWelcome);
+    await managerNotification.notificationsService.checkForNotifications();
+  }
+

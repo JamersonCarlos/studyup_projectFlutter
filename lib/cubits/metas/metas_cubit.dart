@@ -7,10 +7,13 @@ import 'package:meta/meta.dart';
 part 'metas_state.dart';
 
 class MetasCubit extends Cubit<MetasState> {
-  final FirebaseService service = FirebaseService();
+  final FirebaseService service = FirebaseService.instance;
   late List<dynamic> metasByUser = [];
+  late String uid;
   late DateTime focusedDay = DateTime.now();
-  MetasCubit() : super(MetasInitial());
+  MetasCubit() : super(MetasInitial()) {
+    uid = service.uid;
+  }
 
   Future<void> getMetasByUidUser(String uid) async {
     try {
@@ -26,6 +29,12 @@ class MetasCubit extends Cubit<MetasState> {
       emit(MetasError());
     }
   }
+  Future<void> getMetasByUidUserForPormodoroPage()async{
+    emit(MetasLoading());
+    var metas = await service.getAllSubjects();
+    emit(MetasLoadedPomodoro(metas: metas));
+  }
+
 
   Future<void> filterMetasByDay(DateTime day) async {
     emit(MetasLoading());

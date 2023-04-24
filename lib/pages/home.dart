@@ -347,9 +347,7 @@ class _HomeAppState extends State<HomeApp> {
           BlocProvider(
             create: (context) => MetasCubit(),
             child: PomodoroPage(
-              uid: widget.user,
               nameSubject: "",
-              listSubject: [],
             ),
           ),
         ],

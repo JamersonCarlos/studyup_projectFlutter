@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/PageMain.dart';
+import 'package:flutter_application_1/services/firebse_service.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,6 +25,7 @@ class ServiceAuthentication {
   ServiceAuthentication();
   FirebaseFirestore db = FirebaseFirestore.instance;
   ApiService serviceNotification = ApiService();
+  FirebaseService service = FirebaseService.instance;
 
   Future<List<dynamic>> first_login(String user) async {
     DocumentSnapshot doc = await db.collection("users").doc(user).get();
@@ -38,16 +40,17 @@ class ServiceAuthentication {
       UserCredential user = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       if (user != null) {
+        service.uid = user.user!.uid;
         List data = await first_login(user.user!.uid);
         if (data.isEmpty) {
           serviceNotification.getFirstLogin(user.user!.uid);
         }
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-                builder: (context) => menuMain(
-                      uid: user.user!.uid,
-                      // pagelocal: 1,
-                    )),
+                builder: (context) => BlocProvider(create: (context) => NotificationsCubit(context),
+                child: menuMain( uid: user.user!.uid),
+                    ),
+                    ),
             (Route<dynamic> route) => false);
       }
     } on FirebaseAuthException catch (e) {

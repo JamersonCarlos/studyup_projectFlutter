@@ -65,26 +65,12 @@ class _AutheticationPageState extends State<AutheticationPage> {
     // });
   }
 
-  checkNotification(BuildContext context) async {
-    print('emitindo notificacao');
-    final notificationWelcome = ReceivedNotification(
-        id: 1,
-        title: 'Bem vindo ao Study UP',
-        body: 'Agende suas disciplinas agora',
-        payload: 'payload');
-
-    final managerNotification = context.read<NotificationsCubit>();
-    managerNotification.initialize();
-    managerNotification.notificationsService
-        .showNotfication(notificationWelcome);
-    await managerNotification.notificationsService.checkForNotifications();
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     final ServiceAuthentication service = ServiceAuthentication();
     final CalendarCubit _cubit = context.read<CalendarCubit>();
-    checkNotification(context);
+    
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xFFF5F5F5),
