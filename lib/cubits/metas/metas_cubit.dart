@@ -29,12 +29,12 @@ class MetasCubit extends Cubit<MetasState> {
       emit(MetasError());
     }
   }
-  Future<void> getMetasByUidUserForPormodoroPage()async{
+
+  Future<void> getMetasByUidUserForPormodoroPage() async {
     emit(MetasLoading());
     var metas = await service.getAllSubjects();
     emit(MetasLoadedPomodoro(metas: metas));
   }
-
 
   Future<void> filterMetasByDay(DateTime day) async {
     emit(MetasLoading());
@@ -46,11 +46,20 @@ class MetasCubit extends Cubit<MetasState> {
     focusedDay = day;
     List listForFilter = [];
     for (int i = 0; i < metasByUser.length; i++) {
-      if (day.day ==
-          _transformData(metasByUser[i] as Map<String, dynamic>).day) {
+      DateTime transformData =
+          _transformData(metasByUser[i] as Map<String, dynamic>);
+      if (day.day == transformData.day &&
+          day.month == transformData.month &&
+          day.year == transformData.year) {
         listForFilter.add(metasByUser[i]);
       }
     }
+    listForFilter.sort((a, b) {
+      DateTime aDate = _transformData(a as Map<String, dynamic>);
+      DateTime bDate = _transformData(b as Map<String, dynamic>);
+      return aDate.compareTo(bDate);
+    });
+
     return listForFilter;
   }
 

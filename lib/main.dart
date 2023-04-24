@@ -25,14 +25,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Study Up',
-      home: MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (context) => CalendarCubit()),
-          BlocProvider(create: (context) => NotificationsCubit(context)),
-          BlocProvider(create: (context) => MetasCubit()),
-        ],
-        child: const InitialPage(),
-      ),
+      home:  const InitialPage(),
       theme: ThemeData(primarySwatch: Colors.indigo, useMaterial3: true),
     );
   }
