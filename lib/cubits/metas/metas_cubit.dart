@@ -29,12 +29,12 @@ class MetasCubit extends Cubit<MetasState> {
       emit(MetasError());
     }
   }
-  Future<void> getMetasByUidUserForPormodoroPage()async{
+
+  Future<void> getMetasByUidUserForPormodoroPage() async {
     emit(MetasLoading());
     var metas = await service.getAllSubjects();
     emit(MetasLoadedPomodoro(metas: metas));
   }
-
 
   Future<void> filterMetasByDay(DateTime day) async {
     emit(MetasLoading());

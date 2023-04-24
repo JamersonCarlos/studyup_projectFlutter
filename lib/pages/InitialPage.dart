@@ -22,7 +22,7 @@ class _InitialPageState extends State<InitialPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(seconds: 3), () async {
+    Future.delayed(const Duration(seconds: 3), () async {
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
         builder: (context) {
           return MultiBlocProvider(
