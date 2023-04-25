@@ -38,4 +38,9 @@ class FirebaseService {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return data["username"];
   }
+   Future<Map<String,dynamic>> getAllAnotations() async {
+    DocumentSnapshot doc = await db.collection("users").doc(uid).get();
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    return data["anotations"];
+  }
 }
