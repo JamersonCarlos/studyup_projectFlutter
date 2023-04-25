@@ -34,6 +34,7 @@ class MetasCubit extends Cubit<MetasState> {
     emit(MetasLoading());
     var metas = await service.getAllSubjects();
     emit(MetasLoadedPomodoro(metas: metas));
+   
   }
 
   Future<void> filterMetasByDay(DateTime day) async {

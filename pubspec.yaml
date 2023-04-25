@@ -69,6 +69,8 @@ dependencies:
   flutter_timer_countdown: ^1.0.5
   neon_circular_timer: ^0.0.7
   dropdown_button2: ^2.1.0
+  material_dialogs: ^1.1.4
+  lottie: ^2.3.2
 
   
 dev_dependencies:
@@ -110,6 +112,7 @@ flutter:
       - assets/img/initial1.svg
       - assets/img/initial2.svg
       - assets/img/iconMain.jpg
+      - assets/complete.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
