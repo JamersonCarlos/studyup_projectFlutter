@@ -10,11 +10,9 @@ import 'package:flutter_application_1/cubits/metas/metas_cubit.dart';
 import 'package:flutter_application_1/services/api_service.dart';
 
 class PomodoroPage extends StatefulWidget {
-  PomodoroPage({Key? key, required this.nameSubject})
-      : super(key: key);
+  PomodoroPage({Key? key, required this.nameSubject}) : super(key: key);
 
   final String nameSubject;
-
 
   @override
   State<PomodoroPage> createState() => _PomodoroPageState();
@@ -54,63 +52,63 @@ class _PomodoroPageState extends State<PomodoroPage> {
                       // TODO: implement listener
                     },
                     builder: (context, state) {
-                      if(state is MetasLoadedPomodoro){
+                      if (state is MetasLoadedPomodoro) {
                         return DropdownButtonFormField2(
-                        decoration: InputDecoration(
-                          //Add isDense true and zero Padding.
-                          //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
-                          isDense: true,
-                          contentPadding: EdgeInsets.zero,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                          decoration: InputDecoration(
+                            //Add isDense true and zero Padding.
+                            //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+                            isDense: true,
+                            contentPadding: EdgeInsets.zero,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            errorText: validadorSubject
+                                ? "   Escolha uma disciplina"
+                                : null,
+                            //Add more decoration as you want here
+                            //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
                           ),
-                          errorText: validadorSubject
-                              ? "   Escolha uma disciplina"
-                              : null,
-                          //Add more decoration as you want here
-                          //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
-                        ),
-                        isExpanded: true,
-                        hint: const Text(
-                          'Selecione uma Disciplina',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        items: state.metas
-                            .map((item) => DropdownMenuItem<String>(
-                                  value: item["title"],
-                                  child: Text(
-                                    item["title"],
-                                    style: GoogleFonts.lexendDeca(
-                                        color: Colors.black, fontSize: 16),
-                                  ),
-                                ))
-                            .toList(),
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Please select gender.';
-                          }
-                          return null;
-                        },
-                        onChanged: (value) {
-                          selectedValue = value.toString();
-                        },
-                        buttonStyleData: const ButtonStyleData(
-                          height: 60,
-                          padding: EdgeInsets.only(left: 20, right: 10),
-                        ),
-                        iconStyleData: const IconStyleData(
-                          icon: Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.black45,
+                          isExpanded: true,
+                          hint: const Text(
+                            'Selecione uma Disciplina',
+                            style: TextStyle(fontSize: 14),
                           ),
-                          iconSize: 30,
-                        ),
-                        dropdownStyleData: DropdownStyleData(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
+                          items: state.metas
+                              .map((item) => DropdownMenuItem<String>(
+                                    value: item["title"],
+                                    child: Text(
+                                      item["title"],
+                                      style: GoogleFonts.lexendDeca(
+                                          color: Colors.black, fontSize: 16),
+                                    ),
+                                  ))
+                              .toList(),
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Please select gender.';
+                            }
+                            return null;
+                          },
+                          onChanged: (value) {
+                            selectedValue = value.toString();
+                          },
+                          buttonStyleData: const ButtonStyleData(
+                            height: 60,
+                            padding: EdgeInsets.only(left: 20, right: 10),
                           ),
-                        ),
-                      );
+                          iconStyleData: const IconStyleData(
+                            icon: Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black45,
+                            ),
+                            iconSize: 30,
+                          ),
+                          dropdownStyleData: DropdownStyleData(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
+                        );
                       }
                       return Container();
                     },
