@@ -3,16 +3,22 @@ import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/PageAnotation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:flutter_application_1/cubits/metas/metas_cubit.dart';
 import 'package:flutter_application_1/services/api_service.dart';
+import 'package:lottie/lottie.dart';
+import 'package:material_dialogs/dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
+
+import '../PageNewAnotations.dart';
 
 class PomodoroPage extends StatefulWidget {
   PomodoroPage({Key? key, required this.nameSubject}) : super(key: key);
 
-  final String nameSubject;
+  late String nameSubject;
 
   @override
   State<PomodoroPage> createState() => _PomodoroPageState();
@@ -21,7 +27,6 @@ class PomodoroPage extends StatefulWidget {
 class _PomodoroPageState extends State<PomodoroPage> {
   bool visibleButton = true;
   CountDownController controllerTime = CountDownController();
-  FirebaseFirestore db = FirebaseFirestore.instance;
   List<dynamic> listSubjects = [];
   bool validadorSubject = false;
 
@@ -37,6 +42,7 @@ class _PomodoroPageState extends State<PomodoroPage> {
   Widget build(BuildContext context) {
     final MetasCubit cubit = context.read<MetasCubit>();
     cubit.getMetasByUidUserForPormodoroPage();
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -92,6 +98,7 @@ class _PomodoroPageState extends State<PomodoroPage> {
                           onChanged: (value) {
                             selectedValue = value.toString();
                           },
+                          value: selectedValue,
                           buttonStyleData: const ButtonStyleData(
                             height: 60,
                             padding: EdgeInsets.only(left: 20, right: 10),
@@ -144,14 +151,20 @@ class _PomodoroPageState extends State<PomodoroPage> {
             isReverseAnimation: true,
             isTimerTextShown: true,
             autoStart: false,
-            onStart: () {
-              debugPrint('Countdown Started');
-              cubit.updateEnvarimentIa(cubit.uid, 0.2);
-              //inserir reforço positivo para ia aqui
+            onStart: () async {
+              var data = await cubit.service.getMetasByUidUser(cubit.uid);
+              data.forEach((element) {
+                if (element['disciplina'] == selectedValue) {
+                  listSubjects = element['horario_meta'];
+                  print(listSubjects);
+                }
+              });
+              // cubit.updateEnvarimentIa(selectedValue ?? "",cubit.uid, 0.2,0,listSubjects['horario_meta']);
+              // inserir reforço positivo para ia aqui
             },
             onComplete: () {
-              debugPrint('Countdown Ended');
-              cubit.updateEnvarimentIa(cubit.uid, 0.8);
+              showCompleteDialog(context, cubit, selectedValue ?? "");
+              // cubit.updateEnvarimentIa(selectedValue ?? "",cubit.uid, 0.8,25,listSubjects['horario_meta']);
               // inserir reforço positivo para ia aqui
             },
             onChange: (String timeStamp) {
@@ -184,9 +197,9 @@ class _PomodoroPageState extends State<PomodoroPage> {
                   ),
                   onPressed: () {
                     setState(() {
-                      print(selectedValue);
                       if (selectedValue != null) {
                         controllerTime.start();
+                        widget.nameSubject = selectedValue!;
                         visibleButton = false;
                       } else {
                         setState(() {
@@ -229,4 +242,50 @@ class _PomodoroPageState extends State<PomodoroPage> {
       ),
     );
   }
+}
+
+Future<void> showCompleteDialog(
+    BuildContext context, MetasCubit cubit, String disciplina) async {
+  return Dialogs.materialDialog(
+    color: Colors.white,
+    msg: 'Deseja criar uma nova anotação?',
+    title: 'Concluido',
+    lottieBuilder: Lottie.asset(
+      'assets/complete.json',
+      fit: BoxFit.contain,
+    ),
+    context: context,
+    actions: [
+      IconsButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        text: 'cancelar',
+        iconData: Icons.done,
+        color: Colors.grey,
+        textStyle: const TextStyle(color: Colors.black),
+        iconColor: Colors.white,
+      ),
+      IconsButton(
+        onPressed: () {
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) {
+              return Anotations(
+                index_disciplina: 0,
+                title: disciplina,
+                uid: cubit.uid,
+              );
+            },
+          ));
+        },
+        text: 'Sim',
+        iconData: Icons.done,
+        color: Colors.blue,
+        textStyle: const TextStyle(color: Colors.white),
+        iconColor: Colors.white,
+      ),
+    ],
+  );
 }
