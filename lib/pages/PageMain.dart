@@ -121,7 +121,9 @@ class _menuMainState extends State<menuMain> {
                         onTap: () {
                           Navigator.push(context, MaterialPageRoute(
                             builder: (context) {
-                              return const ResultPage();
+                              return ResultPage(
+                                uid: widget.uid,
+                              );
                             },
                           ));
                         },
@@ -194,6 +196,7 @@ class _menuMainState extends State<menuMain> {
           GestureDetector(
             onTap: () async {
               List<dynamic> list = await getAllSubjects();
+              print(list);
               if (list.isNotEmpty) {
                 // ignore: use_build_context_synchronously
                 Navigator.push(
@@ -211,7 +214,6 @@ class _menuMainState extends State<menuMain> {
                         ],
                         child: PomodoroPage(
                           nameSubject: '',
-                    
                         ),
                       );
                     },
@@ -312,16 +314,14 @@ Widget iconMenu(IconData value, String text) {
 }
 
 checkNotification(BuildContext context) async {
-    final notificationWelcome = ReceivedNotification(
-        id: 1,
-        title: 'Bem vindo ao Study UP',
-        body: 'Agende suas disciplinas agora',
-        payload: 'payload');
+  final notificationWelcome = ReceivedNotification(
+      id: 1,
+      title: 'Bem vindo ao Study UP',
+      body: 'Agende suas disciplinas agora',
+      payload: 'payload');
 
-    final managerNotification = context.read<NotificationsCubit>();
-    managerNotification.initialize();
-    managerNotification.notificationsService
-        .showNotfication(notificationWelcome);
-    await managerNotification.notificationsService.checkForNotifications();
-  }
-
+  final managerNotification = context.read<NotificationsCubit>();
+  managerNotification.initialize();
+  managerNotification.notificationsService.showNotfication(notificationWelcome);
+  await managerNotification.notificationsService.checkForNotifications();
+}
