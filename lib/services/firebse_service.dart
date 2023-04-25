@@ -19,26 +19,41 @@ class FirebaseService {
     return subjectdata['metas'] as List<dynamic>;
   }
 
-  Future<void> updateEnvarimentIa(String uid, double reforco) async {
-    // await db.collection("users").doc(uid).collection("QTable").add({
-    //   "meta": meta,
-    //   "status": false,
-    // });
-    print('updateEnvarimentIa');
-    print('valor de reforco: $reforco');
+  Future<void> updateEnvarimentIa(String disciplina, String uid, double reforco,int minutosDeEstudo,String horaDeIncio) async {
+    DocumentSnapshot doc = await db.collection("users").doc(uid).get();
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    for(int i = 0 ; i < data["metas"].length; i++){
+      if(data["metas"][i]["disciplina"] == disciplina && data["metas"][i]["horario_meta"] == horaDeIncio){
+        data["metas"][i]["reforco"] += reforco;
+        data["metas"][i]["horasEstudadas"] += minutosDeEstudo;
+      }
+    }
+     db.collection("users").doc(uid).update(
+      {
+        "metas": data["metas"]
+      },
+    );
+    print(data["metas"]);
   }
-   Future<List<dynamic>> getAllSubjects() async {
+
+  Future<List<dynamic>> getAllSubjects() async {
     DocumentSnapshot doc = await db.collection("users").doc(uid).get();
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return data["disciplinas"];
   }
 
-  Future<String> getNameUser() async {
-    DocumentSnapshot doc = await db.collection("users").doc(uid).get();
-    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    return data["username"];
+  DateTime _transformData(Map<String, dynamic> meta) {
+    String dateString =
+        "${meta['dataMeta'] + "T" + meta['horario_meta']}:00.000Z";
+    try {
+      DateTime date = DateTime.parse(dateString);
+      return date;
+    } catch (e) {
+      return DateTime.now();
+    }
   }
-   Future<Map<String,dynamic>> getAllAnotations() async {
+
+  Future<Map<String, dynamic>> getAllAnotations() async {
     DocumentSnapshot doc = await db.collection("users").doc(uid).get();
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return data["anotations"];
