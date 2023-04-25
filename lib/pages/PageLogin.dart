@@ -38,8 +38,8 @@ class _AutheticationPageState extends State<AutheticationPage> {
   double heightContainer = 530;
   double aligmentContainer = -1;
   double paddinTopContainer = 100;
+  bool visibility_pass = true;
 
-  bool visibility_pass = false;
   final recorder = FlutterSoundRecorder();
 
   @override
@@ -65,12 +65,11 @@ class _AutheticationPageState extends State<AutheticationPage> {
     // });
   }
 
-  
   @override
   Widget build(BuildContext context) {
     final ServiceAuthentication service = ServiceAuthentication();
     final CalendarCubit _cubit = context.read<CalendarCubit>();
-    
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xFFF5F5F5),
@@ -235,12 +234,28 @@ class _AutheticationPageState extends State<AutheticationPage> {
                                   currentFocus.unfocus();
                                 });
                               },
-                              obscureText: false,
+                              obscureText: visibility_pass,
                               autofocus: false,
                               controller: senha,
-                              keyboardType: TextInputType.emailAddress,
+                              keyboardType: TextInputType.text,
                               cursorColor: Colors.grey,
                               decoration: InputDecoration(
+                                suffixIcon: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      visibility_pass = !visibility_pass;
+                                    });
+                                  },
+                                  child: visibility_pass
+                                      ? const Icon(
+                                          Icons.visibility,
+                                          color: Colors.black38,
+                                        )
+                                      : const Icon(
+                                          Icons.visibility_off,
+                                          color: Colors.black38,
+                                        ),
+                                ),
                                 border: InputBorder.none,
                                 prefixIcon: const Icon(
                                   Icons.password,
