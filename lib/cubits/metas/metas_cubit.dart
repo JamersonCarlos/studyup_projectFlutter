@@ -34,7 +34,6 @@ class MetasCubit extends Cubit<MetasState> {
     emit(MetasLoading());
     var metas = await service.getAllSubjects();
     emit(MetasLoadedPomodoro(metas: metas));
-   
   }
 
   Future<void> filterMetasByDay(DateTime day) async {
@@ -64,8 +63,10 @@ class MetasCubit extends Cubit<MetasState> {
     return listForFilter;
   }
 
-  void updateEnvarimentIa(String uid, double reforco) async {
-    await service.updateEnvarimentIa(uid, reforco);
+  void updateEnvarimentIa(String disciplina, String uid, double reforco,
+      int minutos, String horaDeIncio) async {
+    await service.updateEnvarimentIa(
+        disciplina, uid, reforco, minutos, horaDeIncio);
   }
 
   DateTime _transformData(Map<String, dynamic> meta) {

@@ -27,10 +27,8 @@ class PomodoroPage extends StatefulWidget {
 class _PomodoroPageState extends State<PomodoroPage> {
   bool visibleButton = true;
   CountDownController controllerTime = CountDownController();
-  FirebaseFirestore db = FirebaseFirestore.instance;
   List<dynamic> listSubjects = [];
   bool validadorSubject = false;
-
 
   // final List<String> genderItems = [
   //   'Male',
@@ -63,7 +61,6 @@ class _PomodoroPageState extends State<PomodoroPage> {
                       if (state is MetasLoadedPomodoro) {
                         return DropdownButtonFormField2(
                           decoration: InputDecoration(
-
                             //Add isDense true and zero Padding.
                             //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
                             isDense: true,
@@ -154,13 +151,20 @@ class _PomodoroPageState extends State<PomodoroPage> {
             isReverseAnimation: true,
             isTimerTextShown: true,
             autoStart: false,
-            onStart: () {
-              cubit.updateEnvarimentIa(cubit.uid, 0.2);
-              //inserir reforço positivo para ia aqui
+            onStart: () async {
+              var data = await cubit.service.getMetasByUidUser(cubit.uid);
+              data.forEach((element) {
+                if (element['disciplina'] == selectedValue) {
+                  listSubjects = element['horario_meta'];
+                  print(listSubjects);
+                }
+              });
+              // cubit.updateEnvarimentIa(selectedValue ?? "",cubit.uid, 0.2,0,listSubjects['horario_meta']);
+              // inserir reforço positivo para ia aqui
             },
             onComplete: () {
               showCompleteDialog(context, cubit, selectedValue ?? "");
-              cubit.updateEnvarimentIa(cubit.uid, 0.8);
+              // cubit.updateEnvarimentIa(selectedValue ?? "",cubit.uid, 0.8,25,listSubjects['horario_meta']);
               // inserir reforço positivo para ia aqui
             },
             onChange: (String timeStamp) {
@@ -193,7 +197,6 @@ class _PomodoroPageState extends State<PomodoroPage> {
                   ),
                   onPressed: () {
                     setState(() {
-                      
                       if (selectedValue != null) {
                         controllerTime.start();
                         widget.nameSubject = selectedValue!;
