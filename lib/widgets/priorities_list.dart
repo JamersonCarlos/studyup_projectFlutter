@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../models/disciplinas.dart';
 import '../pages/PageNewAnotations.dart';
+import '../services/api_service.dart';
 
 class ListPriorities extends StatefulWidget {
   const ListPriorities({super.key, required this.uid});
@@ -19,6 +20,7 @@ class _ListPrioritiesState extends State<ListPriorities> {
   bool visibleTextForm = false;
   List<dynamic> listSubjects = [];
   TextEditingController subjectController = TextEditingController();
+  ApiService serviceNotification = ApiService();
   Future<List<dynamic>>? subjects;
 
   Future<List<dynamic>> getAllSubjects() async {
@@ -83,6 +85,7 @@ class _ListPrioritiesState extends State<ListPriorities> {
                               } else {
                                 print('Erro! Ordem não alterada');
                               }
+                              serviceNotification.getUpdatePriorit(widget.uid);
                             },
                             padding: const EdgeInsets.all(8),
                             itemCount: count,
@@ -111,6 +114,8 @@ class _ListPrioritiesState extends State<ListPriorities> {
                                         {"disciplinas": list},
                                         SetOptions(merge: true));
                                   });
+                                  serviceNotification
+                                      .getUpdatePriorit(widget.uid);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.only(bottom: 5),
@@ -224,7 +229,7 @@ class _ListPrioritiesState extends State<ListPriorities> {
                   child: Expanded(
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Color(0xFF133262),
+                        color: const Color(0xFF133262),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       height: 62,
@@ -258,6 +263,8 @@ class _ListPrioritiesState extends State<ListPriorities> {
                                     }
                                   },
                                 );
+                                serviceNotification
+                                    .getUpdatePriorit(widget.uid);
                                 subjectController.clear();
                               },
                               child: const Icon(

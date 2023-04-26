@@ -28,10 +28,10 @@ class FirebaseService {
         data["metas"][i]["horasEstudadas"] += minutosDeEstudo;
       }
     }
-     db.collection("users").doc(uid).update(
+     db.collection("users").doc(uid).set(
       {
         "metas": data["metas"]
-      },
+      }, SetOptions(merge: true)
     );
     print(data["metas"]);
   }

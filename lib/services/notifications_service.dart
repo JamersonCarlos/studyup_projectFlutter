@@ -10,18 +10,20 @@ import 'package:flutter_application_1/pages/pomodoro/pomodoro.dart';
 
 import '../pages/home.dart';
 
-
 class NotificationsService {
   late AndroidNotificationDetails androidNotification;
-  final FlutterLocalNotificationsPlugin localNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin localNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
   late final BuildContext context;
-  
+
   NotificationsService(context) {
-    localNotificationsPlugin.resolvePlatformSpecificImplementation<
-    AndroidFlutterLocalNotificationsPlugin>()?.requestPermission();
+    localNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.requestPermission();
     _setupNotifications();
     this.context = context;
-  } 
+  }
 
   _setupNotifications() async {
     await _setupTimezone();
@@ -31,8 +33,8 @@ class NotificationsService {
   Future<void> _setupTimezone() async {
     tzData.initializeTimeZones();
     final tzName = await FlutterNativeTimezone.getLocalTimezone();
-    if(tzName != "GMT"){
-    tz.setLocalLocation(tz.getLocation(tzName));
+    if (tzName != "GMT") {
+      tz.setLocalLocation(tz.getLocation(tzName));
     }
   }
 
@@ -40,7 +42,6 @@ class NotificationsService {
     const android = AndroidInitializationSettings(
         '@mipmap/ic_launcher'); // adiciona um icone as notificacoes
 
-  
     await localNotificationsPlugin.initialize(
       const InitializationSettings(
         android: android,
@@ -49,30 +50,30 @@ class NotificationsService {
     );
   }
 
-  Future<void> _onSelectNotification(String? payload) async { //a ideia e que va apar uma rota especifica
+  Future<void> _onSelectNotification(String? payload) async {
+    //a ideia e que va apar uma rota especifica
     if (payload != null && payload.isNotEmpty) {
       Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (context) => BlocProvider(create: (context)=> MetasCubit(),
-                  child: PomodoroPage(nameSubject: ''))
-                  ),
-                 );
+        MaterialPageRoute(
+            builder: (context) => BlocProvider(
+                create: (context) => MetasCubit(),
+                child: PomodoroPage(nameSubject: ''))),
+      );
     }
   }
-  navegator(String? payload){
+
+  navegator(String? payload) {
     Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (context) => BlocProvider(create: (context)=> MetasCubit(),
-                  child: PomodoroPage(nameSubject: ''))
-                  ),
-                  );
-  } 
+      MaterialPageRoute(
+          builder: (context) => BlocProvider(
+              create: (context) => MetasCubit(),
+              child: PomodoroPage(nameSubject: ''))),
+    );
+  }
 
   showNotfication(ReceivedNotification notification) {
-
     androidNotification = const AndroidNotificationDetails(
-        'Lembrentes_notifications',
-        'lembretes',
+        'Lembrentes_notifications', 'lembretes',
         channelDescription: 'Este e o canal para lembretes',
         importance: Importance.max,
         priority: Priority.max,
@@ -83,14 +84,14 @@ class NotificationsService {
         notification.id,
         notification.title,
         notification.body,
-        tz.TZDateTime.from(date,tz.local),
+        tz.TZDateTime.from(date, tz.local),
         NotificationDetails(
           android: androidNotification,
         ),
         payload: notification.payload,
         androidAllowWhileIdle: true,
-        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime
-        );
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime);
   }
 
   checkForNotifications() async {
@@ -100,5 +101,4 @@ class NotificationsService {
       _onSelectNotification(details.payload);
     }
   }
-  
 }

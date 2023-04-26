@@ -18,13 +18,15 @@ class MetasCubit extends Cubit<MetasState> {
   Future<void> getMetasByUidUser(String uid) async {
     try {
       emit(MetasLoading());
-      if (metasByUser.isNotEmpty) {
-        emit(MetasLoaded(metas: filterMetasForDate(DateTime.now())));
-      } else {
-        emit(MetasLoading());
-        metasByUser = await service.getMetasByUidUser(uid);
-        emit(MetasLoaded(metas: filterMetasForDate(DateTime.now())));
-      }
+      // if (metasByUser.isNotEmpty) {
+      //   emit(MetasLoaded(metas: filterMetasForDate(DateTime.now())));
+      // } else {
+      //   emit(MetasLoading());
+      //   metasByUser = await service.getMetasByUidUser(uid);
+      //   emit(MetasLoaded(metas: filterMetasForDate(DateTime.now())));
+      // }
+      metasByUser = await service.getMetasByUidUser(uid);
+      emit(MetasLoaded(metas: filterMetasForDate(DateTime.now())));
     } catch (e) {
       emit(MetasError());
     }
@@ -63,8 +65,8 @@ class MetasCubit extends Cubit<MetasState> {
     return listForFilter;
   }
 
-  void updateEnvarimentIa(String disciplina, String uid, double reforco,
-      int minutos, String horaDeIncio) async {
+  void updateEnvarimentIa({required String disciplina, required double reforco, required int minutos,
+      required String horaDeIncio}) async {
     await service.updateEnvarimentIa(
         disciplina, uid, reforco, minutos, horaDeIncio);
   }

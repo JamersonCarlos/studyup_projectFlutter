@@ -153,17 +153,17 @@ class _PomodoroPageState extends State<PomodoroPage> {
             autoStart: false,
             onStart: () async {
               var data = await cubit.service.getMetasByUidUser(cubit.uid);
-              data.forEach((element) {
-                if (element['disciplina'] == selectedValue) {
-                  listSubjects = element['horario_meta'];
-                  print(listSubjects);
-                }
-              });
+              // data.forEach((element) {
+              //   if (element['disciplina'] == selectedValue) {
+              //     listSubjects = element['horario_meta'];
+              //     print(listSubjects);
+              //   }
+              // });
               // cubit.updateEnvarimentIa(selectedValue ?? "",cubit.uid, 0.2,0,listSubjects['horario_meta']);
               // inserir reforço positivo para ia aqui
             },
             onComplete: () {
-              showCompleteDialog(context, cubit, selectedValue ?? "");
+              // showCompleteDialog(context, cubit, selectedValue ?? "");
               // cubit.updateEnvarimentIa(selectedValue ?? "",cubit.uid, 0.8,25,listSubjects['horario_meta']);
               // inserir reforço positivo para ia aqui
             },
