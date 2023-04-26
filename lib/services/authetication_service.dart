@@ -74,7 +74,6 @@ class ServiceAuthentication {
     try {
       UserCredential user = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email.trim(), password: senha);
-
       firebaseMessaging.getToken().then((token) => db
           .collection("users")
           .doc(user.user!.uid)
@@ -92,7 +91,7 @@ class ServiceAuthentication {
 
       //Add new user in collection users
       db.collection('users').doc(user.user!.uid).set(newUser);
-
+      await serviceNotification.getFirstLogin(user.user!.uid);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) {
         return MultiBlocProvider(

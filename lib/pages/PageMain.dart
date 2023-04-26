@@ -13,6 +13,7 @@ import '../cubits/calendar/calendar_cubit.dart';
 import '../cubits/metas/metas_cubit.dart';
 import '../cubits/nofications/notifications_cubit.dart';
 import '../models/notifications.dart';
+import 'PageLogin.dart';
 
 class menuMain extends StatefulWidget {
   menuMain({super.key, required this.uid});
@@ -42,17 +43,34 @@ class _menuMainState extends State<menuMain> {
         preferredSize: const Size.fromHeight(65),
         child: AppBar(
           elevation: 10,
-          backgroundColor: const Color(0xFF133262),
+          backgroundColor: Color.fromRGBO(19, 50, 98, 1),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(24),
               bottomRight: Radius.circular(24),
             ),
           ),
-          leading: const Icon(
-            Icons.account_circle_rounded,
-            color: Colors.white,
-            size: 50,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                builder: (context) {
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider(create: (context) => CalendarCubit()),
+                      BlocProvider(
+                          create: (context) => NotificationsCubit(context)),
+                      BlocProvider(create: (context) => MetasCubit()),
+                    ],
+                    child: const AutheticationPage(),
+                  );
+                },
+              ), (route) => false);
+            },
+            child: const Icon(
+              Icons.account_circle_rounded,
+              color: Colors.white,
+              size: 50,
+            ),
           ),
           automaticallyImplyLeading: false,
           leadingWidth: 100,
@@ -316,8 +334,8 @@ Widget iconMenu(IconData value, String text) {
 checkNotification(BuildContext context) async {
   final notificationWelcome = ReceivedNotification(
       id: 1,
-      title: 'Bem vindo ao Study UP',
-      body: 'Agende suas disciplinas agora',
+      title: 'Seja Bem Vindo ao StudyUp',
+      body: 'Gerencie melhor seu tempo de estudo',
       payload: 'payload');
 
   final managerNotification = context.read<NotificationsCubit>();
