@@ -79,7 +79,7 @@ class NotificationsService {
         priority: Priority.max,
         enableVibration: true);
 
-    DateTime date = DateTime.now().add(const Duration(seconds: 3));
+    DateTime date = DateTime.now().add(const Duration(seconds: 300));
     localNotificationsPlugin.zonedSchedule(
         notification.id,
         notification.title,

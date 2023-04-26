@@ -334,8 +334,8 @@ Widget iconMenu(IconData value, String text) {
 checkNotification(BuildContext context) async {
   final notificationWelcome = ReceivedNotification(
       id: 1,
-      title: 'Seja Bem Vindo ao StudyUp',
-      body: 'Gerencie melhor seu tempo de estudo',
+      title: 'Bem vindo ao Study UP',
+      body: 'Agende suas disciplinas agora',
       payload: 'payload');
 
   final managerNotification = context.read<NotificationsCubit>();
