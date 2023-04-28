@@ -1,3 +1,5 @@
+import 'package:flutter_application_1/cubits/metas/metas_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../models/notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
@@ -49,17 +51,21 @@ class NotificationsService {
 
   Future<void> _onSelectNotification(String? payload) async { //a ideia e que va apar uma rota especifica
     if (payload != null && payload.isNotEmpty) {
-      Navigator.of(context).pushAndRemoveUntil(
+      Navigator.of(context).push(
               MaterialPageRoute(
-                  builder: (context) => HomeApp(user: payload,pagelocal: 2,)),
-                  (Route<dynamic> route) => false);
+                  builder: (context) => BlocProvider(create: (context)=> MetasCubit(),
+                  child: PomodoroPage(nameSubject: ''))
+                  ),
+                 );
     }
   }
   navegator(String? payload){
-    Navigator.of(context).pushAndRemoveUntil(
+    Navigator.of(context).push(
               MaterialPageRoute(
-                  builder: (context) => HomeApp(user: payload!,pagelocal: 2,)),
-                  (Route<dynamic> route) => false);
+                  builder: (context) => BlocProvider(create: (context)=> MetasCubit(),
+                  child: PomodoroPage(nameSubject: ''))
+                  ),
+                  );
   } 
 
   showNotfication(ReceivedNotification notification) {
@@ -72,7 +78,7 @@ class NotificationsService {
         priority: Priority.max,
         enableVibration: true);
 
-    DateTime date = DateTime.now().add(const Duration(seconds: 3));
+    DateTime date = DateTime.now().add(const Duration(seconds: 300));
     localNotificationsPlugin.zonedSchedule(
         notification.id,
         notification.title,

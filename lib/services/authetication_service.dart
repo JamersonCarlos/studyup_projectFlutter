@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/PageMain.dart';
+import 'package:flutter_application_1/services/firebse_service.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,8 +12,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_application_1/pages/home.dart';
 
 import '../cubits/calendar/calendar_cubit.dart';
+import '../cubits/metas/metas_cubit.dart';
+import '../cubits/nofications/notifications_cubit.dart';
 import '../pages/PageFreeTime.dart';
 import '../pages/PageLogin.dart';
+import 'api_service.dart';
 
 class ServiceAuthentication {
   // late BuildContext context;
@@ -19,11 +25,14 @@ class ServiceAuthentication {
 
   ServiceAuthentication();
   FirebaseFirestore db = FirebaseFirestore.instance;
+  ApiService serviceNotification = ApiService();
+  FirebaseService service = FirebaseService.instance;
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
   Future<List<dynamic>> first_login(String user) async {
     DocumentSnapshot doc = await db.collection("users").doc(user).get();
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    return data["horários_livres"];
+    return data["metas"];
   }
 
   void doLogin(BuildContext context, CalendarCubit _cubit, String email,
@@ -33,21 +42,15 @@ class ServiceAuthentication {
       UserCredential user = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       if (user != null) {
-        // List data = await first_login(user.user!.uid);
-        // if (data.isNotEmpty) {
-        //   Navigator.of(context).pushAndRemoveUntil(
-        //       MaterialPageRoute(
-        //           builder: (context) => HomeApp(user: user.user!.uid)),
-        //       (Route<dynamic> route) => false);
-        // } else {
-        //   Navigator.of(context).pushAndRemoveUntil(
-        //       MaterialPageRoute(
-        //           builder: (context) => FormTime(uid: user.user!.uid)),
-        //       (Route<dynamic> route) => false);
-        // }
+        service.uid = user.user!.uid;
+        List data = await first_login(user.user!.uid);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-                builder: (context) => HomeApp(user: user.user!.uid,pagelocal: 1,)),
+              builder: (context) => BlocProvider(
+                create: (context) => NotificationsCubit(context),
+                child: menuMain(uid: user.user!.uid),
+              ),
+            ),
             (Route<dynamic> route) => false);
       }
     } on FirebaseAuthException catch (e) {
@@ -71,12 +74,20 @@ class ServiceAuthentication {
     try {
       UserCredential user = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email.trim(), password: senha);
+
+      firebaseMessaging.getToken().then((token) => db
+          .collection("users")
+          .doc(user.user!.uid)
+          .set({"TokenMessaging": token.toString()}, SetOptions(merge: true)));
+
       final newUser = <String, dynamic>{
         "username": username,
         "email": email,
         "disciplinas": [],
         "horários_livres": [],
         "QTableIA": [],
+        "metas": [],
+        "anotations": [],
       };
 
       //Add new user in collection users
@@ -84,8 +95,12 @@ class ServiceAuthentication {
 
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) {
-        return BlocProvider<CalendarCubit>.value(
-          value: _cubit,
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => CalendarCubit()),
+            BlocProvider(create: (context) => NotificationsCubit(context)),
+            BlocProvider(create: (context) => MetasCubit()),
+          ],
           child: const AutheticationPage(),
         );
       }), (Route<dynamic> route) => false);

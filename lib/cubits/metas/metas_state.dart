@@ -13,5 +13,11 @@ class MetasLoaded extends MetasState {
   MetasLoaded({required this.metas});
  
 }
+class MetasLoadedPomodoro extends MetasState {
+  final List<dynamic> metas;
+
+  MetasLoadedPomodoro({required this.metas});
+ 
+}
 
 class MetasError extends MetasState {}

@@ -7,10 +7,13 @@ import 'package:meta/meta.dart';
 part 'metas_state.dart';
 
 class MetasCubit extends Cubit<MetasState> {
-  final FirebaseService service = FirebaseService();
+  final FirebaseService service = FirebaseService.instance;
   late List<dynamic> metasByUser = [];
+  late String uid;
   late DateTime focusedDay = DateTime.now();
-  MetasCubit() : super(MetasInitial());
+  MetasCubit() : super(MetasInitial()) {
+    uid = service.uid;
+  }
 
   Future<void> getMetasByUidUser(String uid) async {
     try {
@@ -27,6 +30,12 @@ class MetasCubit extends Cubit<MetasState> {
     }
   }
 
+  Future<void> getMetasByUidUserForPormodoroPage() async {
+    emit(MetasLoading());
+    var metas = await service.getAllSubjects();
+    emit(MetasLoadedPomodoro(metas: metas));
+  }
+
   Future<void> filterMetasByDay(DateTime day) async {
     emit(MetasLoading());
     filterMetasForDate(day);
@@ -37,32 +46,33 @@ class MetasCubit extends Cubit<MetasState> {
     focusedDay = day;
     List listForFilter = [];
     for (int i = 0; i < metasByUser.length; i++) {
-      var textodata = _transformData(metasByUser[i] as Map<String, dynamic>);
-
-      if (day.day == textodata.day &&
-          day.month == textodata.month &&
-          day.year == textodata.year) {
-
+      DateTime transformData =
+          _transformData(metasByUser[i] as Map<String, dynamic>);
+      if (day.day == transformData.day &&
+          day.month == transformData.month &&
+          day.year == transformData.year) {
         listForFilter.add(metasByUser[i]);
         
       }
     }
     listForFilter.sort((a, b) {
-          var dateA =_transformData(a as Map<String, dynamic>);
-          var dateB =_transformData(b as Map<String, dynamic>);
-          return dateA.compareTo(dateB);
-        });
+      DateTime aDate = _transformData(a as Map<String, dynamic>);
+      DateTime bDate = _transformData(b as Map<String, dynamic>);
+      return aDate.compareTo(bDate);
+    });
+
     return listForFilter;
   }
 
-
-  void updateEnvarimentIa(String uid, double reforco) async {
-    await service.updateEnvarimentIa(uid, reforco);
+  void updateEnvarimentIa(String disciplina, String uid, double reforco,
+      int minutos, String horaDeIncio) async {
+    await service.updateEnvarimentIa(
+        disciplina, uid, reforco, minutos, horaDeIncio);
   }
 
   DateTime _transformData(Map<String, dynamic> meta) {
     String dateString =
-        "${meta['dataMeta'] + "T" + meta['horario_meta']}0:00.000Z";
+        "${meta['dataMeta'] + "T" + meta['horario_meta']}:00.000Z";
     try {
       DateTime date = DateTime.parse(dateString);
       return date;
