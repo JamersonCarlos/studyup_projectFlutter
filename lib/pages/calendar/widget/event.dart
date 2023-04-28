@@ -16,7 +16,7 @@ class EventWidget extends StatelessWidget {
       onTap: (){
         Navigator.push(context,MaterialPageRoute(builder: (context) => BlocProvider.value(
           value: cubit,
-          child: PomodoroPage(disciplina: meta['disciplina'],),
+          child: PomodoroPage( nameSubject: '',),
         ),),);
       },
       child: Padding(
