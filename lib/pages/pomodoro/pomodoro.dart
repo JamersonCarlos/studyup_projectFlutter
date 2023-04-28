@@ -131,7 +131,7 @@ class _PomodoroPageState extends State<PomodoroPage> {
                   ),
                 ),
           CircularCountDownTimer(
-            duration: const Duration(minutes: 25).inSeconds,
+            duration: const Duration(seconds: 10).inSeconds,
             initialDuration: 0,
             controller: controllerTime,
             width: MediaQuery.of(context).size.width,
