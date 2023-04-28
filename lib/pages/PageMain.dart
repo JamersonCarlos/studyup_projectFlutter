@@ -37,6 +37,7 @@ class _menuMainState extends State<menuMain> {
   @override
   Widget build(BuildContext context) {
     checkNotification(context);
+    print(widget.uid);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(65),
