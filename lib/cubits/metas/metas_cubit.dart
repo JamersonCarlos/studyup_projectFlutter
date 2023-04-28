@@ -46,21 +46,21 @@ class MetasCubit extends Cubit<MetasState> {
     focusedDay = day;
     List listForFilter = [];
     for (int i = 0; i < metasByUser.length; i++) {
-      var textodata = _transformData(metasByUser[i] as Map<String, dynamic>);
-
-      if (day.day == textodata.day &&
-          day.month == textodata.month &&
-          day.year == textodata.year) {
-
+      DateTime transformData =
+          _transformData(metasByUser[i] as Map<String, dynamic>);
+      if (day.day == transformData.day &&
+          day.month == transformData.month &&
+          day.year == transformData.year) {
         listForFilter.add(metasByUser[i]);
         
       }
     }
     listForFilter.sort((a, b) {
-          var dateA =_transformData(a as Map<String, dynamic>);
-          var dateB =_transformData(b as Map<String, dynamic>);
-          return dateA.compareTo(dateB);
-        });
+      DateTime aDate = _transformData(a as Map<String, dynamic>);
+      DateTime bDate = _transformData(b as Map<String, dynamic>);
+      return aDate.compareTo(bDate);
+    });
+
     return listForFilter;
   }
 
