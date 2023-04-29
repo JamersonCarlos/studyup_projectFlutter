@@ -121,6 +121,7 @@ class _menuMainState extends State<menuMain> {
                               builder: (context) {
                                 return ListPriorities(
                                     // subjects: getAllSubjects(),
+                                    initializeTouch: callbackFunctionTransitionPages,
                                     uid: widget.uid);
                               },
                             ),
@@ -300,6 +301,10 @@ class _menuMainState extends State<menuMain> {
     }
     return result;
   }
+
+  void callbackFunctionTransitionPages() {
+    print("Ops, carreguei a página de visualização das disciplinas");
+  }
 }
 
 Widget iconMenu(IconData value, String text) {
@@ -342,4 +347,6 @@ checkNotification(BuildContext context) async {
   managerNotification.initialize();
   managerNotification.notificationsService.showNotfication(notificationWelcome);
   await managerNotification.notificationsService.checkForNotifications();
+
+  
 }

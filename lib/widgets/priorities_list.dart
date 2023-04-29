@@ -7,9 +7,10 @@ import '../pages/PageNewAnotations.dart';
 import '../services/api_service.dart';
 
 class ListPriorities extends StatefulWidget {
-  const ListPriorities({super.key, required this.uid});
+  ListPriorities({super.key, required this.uid, required this.initializeTouch});
 
   final String uid;
+  Function initializeTouch;
 
   @override
   State<ListPriorities> createState() => _ListPrioritiesState();
@@ -35,6 +36,7 @@ class _ListPrioritiesState extends State<ListPriorities> {
     // TODO: implement initState
     super.initState();
     Future<List<dynamic>> subjects = getAllSubjects();
+    widget.initializeTouch();
   }
 
   @override
@@ -108,12 +110,18 @@ class _ListPrioritiesState extends State<ListPriorities> {
                                 direction: DismissDirection.startToEnd,
                                 key: Key(list![index]["title"]),
                                 onDismissed: (direction) {
+                                  int backupList = list.length;
                                   setState(() {
                                     list.removeAt(index);
                                     db.collection("users").doc(widget.uid).set(
                                         {"disciplinas": list},
                                         SetOptions(merge: true));
                                   });
+                                  if (list.length == backupList - 1) {
+                                    print("Disciplina removida com sucesso!");
+                                  } else {
+                                    print("Disciplina não foi removida");
+                                  }
                                   serviceNotification
                                       .getUpdatePriorit(widget.uid);
                                 },

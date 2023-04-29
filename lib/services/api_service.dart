@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 class ApiService {
   final dio = Dio();
-  final String baseUrl = "http://192.168.0.3:8000/";
+  final String baseUrl = "http://192.168.0.109:8000/";
 
   Future<Response> getFirstLogin(String uid) async {
     return await dio.get("${baseUrl}firstLogin/$uid");
